@@ -1,21 +1,25 @@
 /*
  * Ladan.cpp
  *
- * Created: 07.04.2020 23:54:48
+ * Created: 02.04.2020 20:36:08
  * Author : 111
  */ 
 
-#include <avr/io.h>
 #include "ButtonDiods.h"
+#include "ADCs.h"
+
 
 
 int main(void)
 {
-    cli();  
-    initButtonDiodsPins();
-    sei();
+	cli();  // отключить глобальные прерывания
+	initADC();
+	initButtonDiodsPins();
+	sei();
+    /* Replace with your application code */
     while (1) 
     {
+		//testADC();
     }
 }
 
