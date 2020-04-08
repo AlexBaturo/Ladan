@@ -64,7 +64,7 @@ void initButtonDiodsPins()
 ISR(INT0_vect)
 {
 	INT0Enable(false);
-	diodeOff((1 << DIODE3)|(1 << DIODE2)|(1 << DIODE1));
+	diodeOff((1 << DIODE2)|(1 << DIODE1));
 	diodeOn((1 << curDiode));
 	
 	switch(curDiode)
@@ -75,15 +75,12 @@ ISR(INT0_vect)
 		case PB2:
 			tempHeater = MODE().MODE2;
 			break;
-		case PB3:
-			tempHeater = MODE().MODE3;
-			break;
 		default:
 			break;
 	}
 	
 	 
-	if(curDiode == DIODE3) curDiode = DIODE1;
+	if(curDiode == DIODE2) curDiode = DIODE1;
 	else curDiode++;
 }
 

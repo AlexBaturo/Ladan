@@ -3,7 +3,7 @@
 
 #define diodeOn(x) PORTB |= x 
 #define diodeOff(x) PORTB &= ~(x) 
-#define diodePortInit DDRB |= (1 << DIODE3)|(1 << DIODE2)|(1 << DIODE1)
+#define diodePortInit DDRB |= (1 << DIODE2)|(1 << DIODE1)
 #define termoSensorsPortInit DDRD |= (1<<BATTERY)|(1<<HEATER)
 #define tSensorHeaterOn PORTD |= (1<<HEATER)
 #define tSensorHeaterOff PORTD &= ~(1<<HEATER)
@@ -17,7 +17,7 @@ const uint8_t BATTERY = PD3;
 //Диоды, показывающие режимы
 const uint8_t DIODE1 = PB1;
 const uint8_t DIODE2 = PB2;
-const uint8_t DIODE3 = PB3;
+
 
 //период таймера опроса АЦП
 const int TIMER_A0 = 200;
@@ -41,12 +41,10 @@ const float DIV_ADC = 1024/AREF;
 
 struct MODE 
 {
-	//Напряжение при температуре 85, В
+	//Напряжение при температуре 80, В
 	const static float MODE1 = 1;
-	//Напряжение при температуре 100, В
-	const static float MODE2 = 2;
-	//Напряжение при температуре 120, В
-	const static float MODE3 = 3;	
+	//Напряжение при температуре 130, В
+	const static float MODE2 = 2;	
 };
 
 
