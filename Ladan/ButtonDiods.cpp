@@ -1,13 +1,13 @@
 ﻿#include "ButtonDiods.h"
 
-unsigned int cur = PB1;
-float temp = 1;
+float tempHeater;
+uint8_t curDiode;
 
 void iniTimerA1(void)
 {
 	// инициализация TimerA1
 
-	OCR1A = 3000; // установка регистра совпадения
+	OCR1A = TIMERA1; // установка регистра совпадения
 	TCCR1B |= (1 << WGM12)|(1 << CS12);;  // включить CTC режим, уст делит на 256
 	TIMSK1 |= (1 << OCIE1A);
 	
@@ -30,6 +30,12 @@ void INT0Enable(bool state)
 	
 }
 
+void startCondition()
+{
+	curDiode = DIODE1;
+	tempHeater = 1;
+}
+
 void initButtonDiodsPins() 
 {
 	/*Инициализируем выводы для диодов и кнопки,
@@ -37,9 +43,10 @@ void initButtonDiodsPins()
 	  настраиваем внешнее прерывание*/
 	  	
 	//Диоды 
-	DDRD |= (1<<PB3)|(1<<PB2)|(1<<PB1);
+	diodePortInit((1 << DIODE3)|(1 << DIODE2)|(1 << DIODE1));
 
-	PORTB |=  (1 << PB1);
+	diodeOn((1 << DIODE1));
+	startCondition();
 	
 	//Включим ножку INT0 на вход
 	DDRD &= ~(1<<PD2);
@@ -50,36 +57,37 @@ void initButtonDiodsPins()
 	iniTimerA1();
 }
 
+
 float getTemp()
 {
-	return temp;
+	return tempHeater;
 }
 
 
 ISR(INT0_vect)
 {
 	INT0Enable(false);
-	PORTB &= ~((1 << PB3)|(1<<PB2)|(1<<PB1));
-	PORTB |=  (1 << cur);
+	diodeOff((1 << DIODE3)|(1 << DIODE2)|(1 << DIODE1));
+	diodeOn((1 << curDiode));
 	
-	switch(cur)
+	switch(curDiode)
 	{
 		case PB1:
-			temp = 1;
+			tempHeater = 1;
 			break;
 		case PB2:
-			temp = 2;
+			tempHeater = 2;
 			break;
 		case PB3:
-			temp = 3;
+			tempHeater = 3;
 			break;
 		default:
 			break;
 	}
 	
 	 
-	if(cur == PB3) cur = PB1;
-	else cur++;
+	if(curDiode == DIODE3) curDiode = DIODE1;
+	else curDiode++;
 }
 
 ISR (TIMER1_COMPA_vect)

@@ -5,14 +5,21 @@
  *  Author: 111
  */ 
 
-#pragma once
+#ifndef ADC_H_
+#define ADC_H_
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
 #include "ButtonDiods.h"
 
- void initADC();
- void testADC();
+
+void initADC();
+void testADC();
+
+
+
+#endif /* ADC_H_ */
+
 
 

@@ -3,6 +3,9 @@
 int ADCn = MUX0;
 bool flag = true; // true, когда нагреваем
 
+
+
+
 void iniTimerB1(void)
 {
 	// инициализация TimerB1
