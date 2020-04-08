@@ -7,7 +7,7 @@ void iniTimerA1(void)
 {
 	// инициализация TimerA1
 
-	OCR1A = TIMERA1; // установка регистра совпадения
+	OCR1A = TIMER_A1; // установка регистра совпадения
 	TCCR1B |= (1 << WGM12)|(1 << CS12);;  // включить CTC режим, уст делит на 256
 	TIMSK1 |= (1 << OCIE1A);
 	
@@ -34,6 +34,7 @@ void startCondition()
 {
 	curDiode = DIODE1;
 	tempHeater = 1;
+	diodeOn((1 << DIODE1));
 }
 
 void initButtonDiodsPins() 
@@ -43,9 +44,9 @@ void initButtonDiodsPins()
 	  настраиваем внешнее прерывание*/
 	  	
 	//Диоды 
-	diodePortInit((1 << DIODE3)|(1 << DIODE2)|(1 << DIODE1));
+	diodePortInit;
 
-	diodeOn((1 << DIODE1));
+	//Начальный режим работы
 	startCondition();
 	
 	//Включим ножку INT0 на вход
@@ -58,10 +59,6 @@ void initButtonDiodsPins()
 }
 
 
-float getTemp()
-{
-	return tempHeater;
-}
 
 
 ISR(INT0_vect)
@@ -73,13 +70,13 @@ ISR(INT0_vect)
 	switch(curDiode)
 	{
 		case PB1:
-			tempHeater = 1;
+			tempHeater = MODE().MODE1;
 			break;
 		case PB2:
-			tempHeater = 2;
+			tempHeater = MODE().MODE2;
 			break;
 		case PB3:
-			tempHeater = 3;
+			tempHeater = MODE().MODE3;
 			break;
 		default:
 			break;

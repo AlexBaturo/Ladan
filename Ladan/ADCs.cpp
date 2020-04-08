@@ -4,13 +4,11 @@ int ADCn = MUX0;
 bool flag = true; // true, когда нагреваем
 
 
-
-
-void iniTimerB1(void)
+void iniTimerA0(void)
 {
-	// инициализация TimerB1
+	// инициализация TimerA0
 
-	OCR0A = 200; // установка регистра совпадения
+	OCR0A = TIMER_A0; // установка регистра совпадения
 	TCCR0A |= (1<<WGM01); //включить CTC режим
 	TCCR0B |= (1 << CS02);  //уст делит на 256
 	TIMSK0 |= (1 << OCIE0A);
@@ -19,7 +17,8 @@ void iniTimerB1(void)
 
 void initADC()
 {
-	DDRD = (1<<PD4)|(1<<PD7);//Test
+	//Инициализируем порты с датчиками температуры
+	termoSensorsPortInit;
 
 	ADCSRA |= (1<<ADEN)// Разрешение использования АЦП
 	|(1<<ADSC)//Запуск преобразования
@@ -30,11 +29,11 @@ void initADC()
 	ADMUX |= 0 //AREF, internal Vref turned off
 	|(1<<MUX0); // вход ADC1
 
-	iniTimerB1();
+	iniTimerA0();
 	
 }
 
-unsigned int ADC_convert ()
+float ADC_convert ()
 {
 	ADCSRA |= (1<<ADSC);
 	//проверим закончилось ли преобразов
@@ -44,37 +43,40 @@ unsigned int ADC_convert ()
 	{};
 	int low_adc = ADCL;
 	int high_adc = ADCH;
-	return high_adc*256+low_adc;
+	return (high_adc*256+low_adc)/DIV_ADC;
 }
 
-void batteryPWR(double temp)
+void batteryPWR()
 {
-	float n =  (float) ADC_convert ()/208;
 	ADCn = MUX0;
-	if(n <= temp ) PORTD |= (1<<PD3);
-	else PORTD &= ~(1<<PD3);
+	if((ADC_convert ()) <= TEMP_BATTERY ) tSensorBatteryOn;
+	else tSensorBatteryOff;
 }
 
 void heaterPWR()
 {
-	float n =  (float) ADC_convert ()/208;
 	ADCn = MUX1;
-	float dif = 0.5;
 	if (flag)
 	{
-		if(n < (float)(getTemp() + dif) ) PORTD |= (1<<PD7);
+		if(ADC_convert () < (float)(tempHeater + DIFF) ) 
+		{
+			tSensorHeaterOn;
+		}
 		else
 		{
-			PORTD &= ~(1<<PD7);
+			tSensorHeaterOff;
 			flag = false;
 		}
 	}
 	else
 	{
-		if(n > (float)(getTemp() - dif)) PORTD &= ~(1<<PD7);
+		if(ADC_convert () > (float)(tempHeater - DIFF)) 
+		{
+			tSensorHeaterOff;
+		}
 		else
 		{
-			PORTD |= (1<<PD7);
+			tSensorHeaterOn;
 			flag = true;
 		}
 	}
@@ -90,6 +92,6 @@ ISR (TIMER0_COMPA_vect)
 
 	else if(ADCn == MUX1)
 	{
-		batteryPWR(2);
+		batteryPWR();
 	}
 }

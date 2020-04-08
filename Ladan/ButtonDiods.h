@@ -8,6 +8,6 @@
 #include "config.h"
 
 void initButtonDiodsPins();
-float getTemp();
+
 
 #endif 
