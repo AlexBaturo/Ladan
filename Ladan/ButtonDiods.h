@@ -4,5 +4,5 @@
 #include <avr/interrupt.h>
 
 void initButtonDiodsPins();
-int getTemp();
+float getTemp();
 

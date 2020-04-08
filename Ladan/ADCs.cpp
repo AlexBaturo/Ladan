@@ -1,6 +1,7 @@
 #include "ADCs.h"
 
 int ADCn = MUX0;
+bool flag = true; // true, когда нагреваем
 
 void iniTimerB1(void)
 {
@@ -12,43 +13,68 @@ void iniTimerB1(void)
 	TIMSK0 |= (1 << OCIE0A);
 	
 }
- 
- void initADC()
+
+void initADC()
 {
-  DDRD = (1<<PD4)|(1<<PD7);//Test	
+	DDRD = (1<<PD4)|(1<<PD7);//Test
 
-  ADCSRA |= (1<<ADEN)// Разрешение использования АЦП
-  |(1<<ADSC)//Запуск преобразования
-  //|(1<<ADATE)//Непрерывный режим работы АЦП
-  //|(1<<ADIE)//Разрешение прерываний
-  |(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);//Делитель 128 = 64 кГц
+	ADCSRA |= (1<<ADEN)// Разрешение использования АЦП
+	|(1<<ADSC)//Запуск преобразования
+	//|(1<<ADATE)//Непрерывный режим работы АЦП
+	//|(1<<ADIE)//Разрешение прерываний
+	|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);//Делитель 128 = 64 кГц
 
-  ADMUX |= 0 //AREF, internal Vref turned off
-  |(1<<MUX0); // вход ADC1
+	ADMUX |= 0 //AREF, internal Vref turned off
+	|(1<<MUX0); // вход ADC1
 
-  iniTimerB1();
-  
-} 
-
-unsigned int ADC_convert () 
-{
-  ADCSRA |= (1<<ADSC);
-  //проверим закончилось ли преобразов
-  ADMUX ^= (1<<MUX0);
-  ADMUX ^= (1<<MUX1);
-  while(ADCSRA & (1<<ADSC))
-  {};
-  int low_adc = ADCL;
-  int high_adc = ADCH;
-  return high_adc*256+low_adc;
+	iniTimerB1();
+	
 }
 
-void change(double temp, int mux, int pin)
+unsigned int ADC_convert ()
+{
+	ADCSRA |= (1<<ADSC);
+	//проверим закончилось ли преобразов
+	ADMUX ^= (1<<MUX0);
+	ADMUX ^= (1<<MUX1);
+	while(ADCSRA & (1<<ADSC))
+	{};
+	int low_adc = ADCL;
+	int high_adc = ADCH;
+	return high_adc*256+low_adc;
+}
+
+void batteryPWR(double temp)
 {
 	float n =  (float) ADC_convert ()/208;
-	ADCn = mux;
-	if(n >= temp ) PORTD |= (1<<pin);
-	else PORTD &= ~(1<<pin);
+	ADCn = MUX0;
+	if(n <= temp ) PORTD |= (1<<PD3);
+	else PORTD &= ~(1<<PD3);
+}
+
+void heaterPWR()
+{
+	float n =  (float) ADC_convert ()/208;
+	ADCn = MUX1;
+	float dif = 0.5;
+	if (flag)
+	{
+		if(n < (float)(getTemp() + dif) ) PORTD |= (1<<PD7);
+		else
+		{
+			PORTD &= ~(1<<PD7);
+			flag = false;
+		}
+	}
+	else
+	{
+		if(n > (float)(getTemp() - dif)) PORTD &= ~(1<<PD7);
+		else
+		{
+			PORTD |= (1<<PD7);
+			flag = true;
+		}
+	}
 }
 
 
@@ -56,11 +82,11 @@ ISR (TIMER0_COMPA_vect)
 {
 	if(ADCn == MUX0)
 	{
-		change(getTemp(), MUX1, PD7);
+		heaterPWR();
 	}
 
 	else if(ADCn == MUX1)
 	{
-		change(2, MUX0, PD3);
+		batteryPWR(2);
 	}
 }

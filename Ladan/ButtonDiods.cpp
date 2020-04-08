@@ -1,7 +1,7 @@
 ﻿#include "ButtonDiods.h"
 
 unsigned int cur = PB1;
-int temp = 1;
+float temp = 1;
 
 void iniTimerA1(void)
 {
@@ -50,7 +50,7 @@ void initButtonDiodsPins()
 	iniTimerA1();
 }
 
-int getTemp()
+float getTemp()
 {
 	return temp;
 }
