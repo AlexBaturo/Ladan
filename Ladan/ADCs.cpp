@@ -1,8 +1,8 @@
 #include "ADCs.h"
 
 int ADCn = MUX0;
-bool flag = true; // true, ����� ���������
-
+bool flagHeater = true; // true, ����� ���������
+bool flagBattery = true;
 
 void iniTimerA0(void)
 {
@@ -49,36 +49,41 @@ float ADC_convert ()
 
 void batteryPWR()
 {
-	ADCn = MUX0;
-	if((ADC_convert ()) <= TEMP_BATTERY ) tSensorBatteryOn;
-	else tSensorBatteryOff;
-}
-
-void heaterPWR()
-{
-	ADCn = MUX1;
-	if (flag)
+	if(flagBattery)
 	{
-		if(ADC_convert () < (float)(tempHeater + DIFF) ) 
-		{
-			tSensorHeaterOn;
-		}
-		else
-		{
-			tSensorHeaterOff;
-			flag = false;
+		if(((ADC_convert ()) >= TEMPERATURE().BATTERY || !pressSensAns)) 
+		{	
+			BatteryOff;
+			flagBattery = false;
 		}
 	}
 	else
 	{
-		if(ADC_convert () > (float)(tempHeater - DIFF)) 
+		if(((ADC_convert ()) <= TEMPERATURE().BATTERY - DIFF().BATTERY) && pressSensAns)
 		{
-			tSensorHeaterOff;
+			BatteryOn;
+			flagBattery = true;
 		}
-		else
+		
+	}
+}
+
+void heaterPWR()
+{
+	if (flagHeater)
+	{
+		if(ADC_convert () >= (float)(tempHeater) ) 
 		{
-			tSensorHeaterOn;
-			flag = true;
+			HeaterOff;
+			flagHeater = false;
+		}
+	}
+	else
+	{
+		if(ADC_convert () <= (float)(tempHeater - DIFF().HEATER)) 
+		{
+			HeaterOn;
+			flagHeater = true;
 		}
 	}
 }
@@ -88,11 +93,13 @@ ISR (TIMER0_COMPA_vect)
 {
 	if(ADCn == MUX0)
 	{
+		ADCn = MUX1;
 		heaterPWR();
 	}
 
 	else if(ADCn == MUX1)
-	{
+	{	
+		ADCn = MUX0;
 		batteryPWR();
 	}
 }
