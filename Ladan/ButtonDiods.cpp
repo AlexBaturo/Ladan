@@ -1,4 +1,4 @@
-﻿#include "ButtonDiods.h"
+#include "ButtonDiods.h"
 
 float tempHeater;
 uint8_t curDiode;
@@ -69,11 +69,11 @@ ISR(INT0_vect)
 	
 	switch(curDiode)
 	{
-		case PB1:
-			tempHeater = MODE().MODE1;
+		case DIODE1:
+			tempHeater = TEMPERATURE().HEATER1;
 			break;
-		case PB2:
-			tempHeater = MODE().MODE2;
+		case DIODE2:
+			tempHeater = TEMPERATURE().HEATER2;
 			break;
 		default:
 			break;
