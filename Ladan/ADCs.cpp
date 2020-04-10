@@ -10,7 +10,7 @@ void iniTimerA0(void)
 
 	OCR0A = timeToFloat (TIMER_A0); // ��������� �������� ����������
 	TCCR0A |= (1<<WGM01); //�������� CTC �����
-	TCCR0B |= (1 << CS02);  //��� ����� �� 256
+	TCCR0B |= (1 << CS02)|(1 << CS00);  //��� ����� �� 256
 	TIMSK0 |= (1 << OCIE0A);
 	
 }

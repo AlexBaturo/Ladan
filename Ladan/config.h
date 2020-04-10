@@ -16,6 +16,11 @@
 					  PORTB |= (1<<PRESSURE);
 #define pressSensAns !(PINB & (1<<PRESSURE))
 
+#define startTimerA1 TCCR1B |= (1 << CS12);  // ��� ����� �� 256
+#define stopTimerA1 TCCR1B &= ~(1 << CS12); \
+					TCNT1 = 0;
+
+
 //���������� �������������
 const uint8_t HEATER = PD7;
 const uint8_t BATTERY = PD3; 
