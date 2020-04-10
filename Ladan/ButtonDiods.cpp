@@ -7,7 +7,7 @@ void iniTimerA1(void)
 {
 	// инициализация TimerA1
 
-	OCR1A = TIMER_A1; // установка регистра совпадения
+	OCR1A = timeToFloat(TIMER_A1); // установка регистра совпадения
 	TCCR1B |= (1 << WGM12)|(1 << CS12);;  // включить CTC режим, уст делит на 256
 	TIMSK1 |= (1 << OCIE1A);
 	

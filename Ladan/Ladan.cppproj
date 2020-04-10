@@ -165,6 +165,9 @@
     <Compile Include="ButtonDiods.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="config.cpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
