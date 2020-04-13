@@ -49,43 +49,35 @@ float ADC_convert ()
 
 void batteryPWR()
 {
-	if(flagBattery)
-	{
 		if(((ADC_convert ()) >= TEMPERATURE().BATTERY || !pressSensAns)) 
 		{	
 			BatteryOff;
 			flagBattery = false;
 		}
-	}
-	else
-	{
-		if(((ADC_convert ()) <= TEMPERATURE().BATTERY - DIFF().BATTERY) && pressSensAns)
+		else if(((ADC_convert ()) <= TEMPERATURE().BATTERY - DIFF().BATTERY) && pressSensAns)
 		{
 			BatteryOn;
 			flagBattery = true;
 		}
 		
-	}
+	
 }
 
 void heaterPWR()
 {
-	if (flagHeater)
-	{
+	
 		if(ADC_convert () >= (float)(tempHeater) ) 
 		{
 			HeaterOff;
 			flagHeater = false;
 		}
-	}
-	else
-	{
-		if(ADC_convert () <= (float)(tempHeater - DIFF().HEATER)) 
+	
+		else if(ADC_convert () < (float)(tempHeater - DIFF().HEATER)) 
 		{
 			HeaterOn;
 			flagHeater = true;
 		}
-	}
+	
 }
 
 

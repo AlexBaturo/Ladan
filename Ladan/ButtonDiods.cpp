@@ -13,24 +13,7 @@ void iniTimerA1(void)
 	
 }
 
-void INT0Enable(bool state)
-{
-	//Управление прерыванием INT0
 
-	EICRA &= ~(1<<ISC01)|(1<<ISC00); //включим прерывания INT0 по низкому уровню
-
-	if (state) EIMSK |= (1<<INT0); //разрешим внешние прерывания INT0
-	else EIMSK &= ~(1<<INT0);
-	
-}
-
-void startCondition()
-{
-	curDiode = DIODE2;
-	tempHeater = TEMPERATURE().HEATER1;
-	diodeOn((1 << DIODE1));
-	HeaterOn;
-}
 
 void initButtonDiodsPins() 
 {
@@ -42,24 +25,16 @@ void initButtonDiodsPins()
 	diodePortInit;
 
 	//Начальный режим работы
-	startCondition();
+	//HeaterOn;
 	
-	//Включим ножку INT0 на вход
-	DDRD &= ~(1<<PD2);
-	
-	//Подтянем резистор на ножке INT0 к питанию
-	PORTD |= (1<<PD2);
-
-	INT0Enable(true);
+	ButtonPinsInit;
+	ButtonPinsOn((1<<BUTTON_PIN2)|(1<<BUTTON_PIN1));
 
 	iniTimerA1();
-}
-
-
-ISR(INT0_vect)
-{	
 	startTimerA1;
 }
+
+
 
 
 ISR (TIMER1_COMPA_vect)
@@ -78,10 +53,10 @@ ISR (TIMER1_COMPA_vect)
 		default:
 		break;
 	}
-	
-	if(curDiode == DIODE2) curDiode = DIODE1;
-	else curDiode++;
 
-	stopTimerA1;
+
+	if(!(ButtonPort & (1<< BUTTON_PIN2)))  curDiode =  DIODE2;
+	else if(!(ButtonPort & (1<< BUTTON_PIN1))) curDiode = DIODE1; 
+
 
 }

@@ -18,10 +18,18 @@
 					  PORTB |= (1<<PRESSURE);
 #define pressSensAns !(PINB & (1<<PRESSURE))
 
+#define ButtonPinsInit DDRD &= ~((1<<BUTTON_PIN2)|(1<<BUTTON_PIN1)); 
+#define ButtonPinsOn(x) PORTD |= x
+#define ButtonPort PIND
+
 #define startTimerA1 TCCR1B |= (1 << CS12);  // ��� ����� �� 256
 #define stopTimerA1 TCCR1B &= ~(1 << CS12); \
 					TCNT1 = 0;
 
+
+//������
+const uint8_t BUTTON_PIN1 = PD1; 
+const uint8_t BUTTON_PIN2 = PD4;
 
 //���������� �������������
 const uint8_t HEATER = PD7;
@@ -38,8 +46,8 @@ const uint8_t PRESSURE = PB6;
 const int TIMER_A0 = 300;
 
 /*������ ������� ��� ������ �� ��������, 
-	���������� ����� 1000 ��  */
-const int TIMER_A1 = 1000;
+	���������� ����� 50 ��  */
+const int TIMER_A1 = 50;
 
 //���  B5761-S 103-F40
 struct RES_DIV 
