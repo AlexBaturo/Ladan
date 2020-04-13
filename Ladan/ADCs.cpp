@@ -51,7 +51,7 @@ void batteryPWR()
 {
 	if(flagBattery)
 	{
-		if(((ADC_convert ()) >= TEMPERATURE().BATTERY || !pressSensAns)) 
+		if(((ADC_convert ()) <= TEMPERATURE().BATTERY || !pressSensAns)) 
 		{	
 			BatteryOff;
 			flagBattery = false;
@@ -59,7 +59,7 @@ void batteryPWR()
 	}
 	else
 	{
-		if(((ADC_convert ()) <= TEMPERATURE().BATTERY - DIFF().BATTERY) && pressSensAns)
+		if(((ADC_convert ()) >= TEMPERATURE().BATTERY - DIFF().BATTERY) && pressSensAns)
 		{
 			BatteryOn;
 			flagBattery = true;
@@ -72,7 +72,7 @@ void heaterPWR()
 {
 	if (flagHeater)
 	{
-		if(ADC_convert () >= (float)(tempHeater) ) 
+		if(ADC_convert () <= (float)(tempHeater) ) 
 		{
 			HeaterOff;
 			flagHeater = false;
@@ -80,7 +80,7 @@ void heaterPWR()
 	}
 	else
 	{
-		if(ADC_convert () <= (float)(tempHeater - DIFF().HEATER)) 
+		if(ADC_convert () >= (float)(tempHeater - DIFF().HEATER)) 
 		{
 			HeaterOn;
 			flagHeater = true;
