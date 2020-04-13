@@ -44,7 +44,7 @@ float ADC_convert ()
 	{};
 	int low_adc = ADCL;
 	int high_adc = ADCH;
-	return AREF*(high_adc*256+low_adc)/1024;
+	return RES_DIV().AREF*(high_adc*256+low_adc)/1024;
 }
 
 void batteryPWR()

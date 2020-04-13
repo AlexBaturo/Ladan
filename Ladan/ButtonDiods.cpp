@@ -27,8 +27,9 @@ void INT0Enable(bool state)
 void startCondition()
 {
 	curDiode = DIODE2;
-	tempHeater = 1;
+	tempHeater = TEMPERATURE().HEATER1;
 	diodeOn((1 << DIODE1));
+	HeaterOn;
 }
 
 void initButtonDiodsPins() 

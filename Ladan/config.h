@@ -39,15 +39,51 @@ const int TIMER_A0 = 300;
 	���������� ����� 1000 ��  */
 const int TIMER_A1 = 1000;
 
-//����������� ���������� ���, �
-const static float	AREF = 5;
+//���  B5761-S 103-F40
+/*struct RES_DIV 
+{
+	//����������� ���������� ���, �
+	const static float AREF = 4.92;
+	//�������� � ��������, ��
+	const static float R = 10000;
+	//��������� �� ����
+	const static float B = 3988;
+	//����������� ��� ���� ���, �
+	const static float T0 = 298;
+	//������������� �������� ��� ���� ���, ��
+	const static float R0 = 10000;
+
+};*/
+
+//��� KTY81/210,112
+struct RES_DIV
+{
+	//����������� ���������� ���, �
+	const static float AREF = 4.92;
+	//�������� � ��������, ��
+	const static float R = 10000;
+	//��������� �� ����
+	const static float B = -790;
+	//����������� ��� ���� ���, �
+	const static float T0 = 298;
+	//������������� �������� ��� ���� ���, ��
+	const static float R0 = 2000;
+
+};
+
+
+//�������� - �����, ��
+float timeToFloat (const float msTime);
+
+//�������� - ����������� � ��������
+const float tempToVolt (const float temp);
 
 
 //���������� �� �������� �����������, ����
 struct DIFF
 {
-	const static float HEATER = 0.5;
-	const static float BATTERY = 0.5;
+	const static float HEATER = 0.0;
+	const static float BATTERY = 0.0;
 };
 
 
