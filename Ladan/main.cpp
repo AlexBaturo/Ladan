@@ -13,7 +13,7 @@
 
 int main(void)
 {
-	cli();  // ��������� ���������� ����������
+	cli();  // Отключение глобального прерывания
 	initADC();
 	initButtonDiodsPins();
 	sei();

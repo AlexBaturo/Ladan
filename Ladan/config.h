@@ -22,59 +22,58 @@
 #define ButtonPinsOn(x) PORTD |= x
 #define ButtonPort PIND
 
-#define startTimerA1 TCCR1B |= (1 << CS12);  // ��� ����� �� 256
+#define startTimerA1 TCCR1B |= (1 << CS12);  // запускаем таймер с делителем 256
 #define stopTimerA1 TCCR1B &= ~(1 << CS12); \
 					TCNT1 = 0;
 
 
-//������
+//Входы для сигнала с кнопки
 const uint8_t BUTTON_PIN1 = PD1; 
 const uint8_t BUTTON_PIN2 = PD4;
 
-//���������� �������������
+//Выходы для управления 
 const uint8_t HEATER = PD7;
 const uint8_t BATTERY = PD3; 
 
-//�����, ������������ ������
+//Выходы управление диодами
 const uint8_t DIODE1 = PB1;
 const uint8_t DIODE2 = PB2;
 
-//�����, ���� ��������� �������� �������������
+//Вход с датчика давления 
 const uint8_t PRESSURE = PB6;
 
-//������ ������� ������ ���, ��
+//Период опроса АЦП, мс
 const int TIMER_A0 = 300;
 
-/*������ ������� ��� ������ �� ��������, 
-	���������� ����� 50 ��  */
+/*Период опроса кнопки, мс */
 const int TIMER_A1 = 50;
 
-//���  B5761-S 103-F40
+//Терморез  B5761-S 103-F40
 struct RES_DIV 
 {
-	//����������� ���������� ���, �
+	//референсное напряжение, В
 	const static float AREF = 4.92;
-	//�������� � ��������, ��
+	//Резистор в делителе, Ом
 	const static float R = 10000;
-	//��������� �� ����
+	//B-value , константа из дока
 	const static float B = 3988;
-	//����������� ��� ���� ���, �
+	//Нормальная температура резистора, К
 	const static float T0 = 298;
-	//������������� �������� ��� ���� ���, ��
+	//Сопротивление при норм темп, Ом
 	const static float R0 = 10000;
 
 };
 
 
 
-//�������� - �����, ��
+//из мс получаем число для записи в регистр OCR
 float timeToFloat (const float msTime);
 
-//�������� - ����������� � ��������
+//переводи температуру в вольты
 const float tempToVolt (const float temp);
 
 
-//���������� �� �������� �����������, ����
+//структура для задания разницы температуры
 struct DIFF
 {
 	const static float HEATER = 0.0;
@@ -82,18 +81,18 @@ struct DIFF
 };
 
 
-//������ ������
+//Выставляем температурные режимы
 struct TEMPERATURE 
 {
-	//���������� ��� ����������� 80, �
+	//первый режим 
 	const float HEATER1 = tempToVolt(27);
-	//���������� ��� ����������� 130, �
+	//второй режим
     const float HEATER2 = tempToVolt(45);	
-	//������������ ����������� �������, ����
-    const float BATTERY = tempToVolt(60);;
+	//макс температура для батареи
+    const float BATTERY = tempToVolt(60);
 };
 
-//�������� �������
+//делитель таймера
 const int TIMER_DIVIDER = 256;
 
 extern float tempHeater;

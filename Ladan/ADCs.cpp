@@ -1,34 +1,31 @@
 #include "ADCs.h"
 
 int ADCn = MUX0;
-bool flagHeater = true; // true, ����� ���������
-bool flagBattery = true;
+
 
 void iniTimerA0(void)
 {
-	// ������������� TimerA0
+	//таймер для опроса АЦП TimerA0
 
-	OCR0A = timeToFloat (TIMER_A0); // ��������� �������� ����������
-	TCCR0A |= (1<<WGM01); //�������� CTC �����
-	TCCR0B |= (1 << CS02)|(1 << CS00);  //��� ����� �� 256
+	OCR0A = timeToFloat (TIMER_A0); // частота таймера
+	TCCR0A |= (1<<WGM01); //выбор режима CTС
+	TCCR0B |= (1 << CS02)|(1 << CS00);  //делитель 256
 	TIMSK0 |= (1 << OCIE0A);
 	
 }
 
 void initADC()
 {
-	//�������������� ����� � ��������� �����������
+	//инициальизация портов
 	termoPortInit;
 	pressSensInit;
 
-	ADCSRA |= (1<<ADEN)// ���������� ������������� ���
-	|(1<<ADSC)//������ ��������������
-	//|(1<<ADATE)//����������� ����� ������ ���
-	//|(1<<ADIE)//���������� ����������
-	|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);//�������� 128 = 64 ���
+	ADCSRA |= (1<<ADEN)// разрешаем работу АЦП
+	|(1<<ADSC)//инициализируем работу АЦП
+	|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);//частота работы ацп
 
 	ADMUX |= 0 //AREF, internal Vref turned off
-	|(1<<MUX0); // ���� ADC1
+	|(1<<MUX0); // работает ADC1
 
 	iniTimerA0();
 	
@@ -37,7 +34,7 @@ void initADC()
 float ADC_convert ()
 {
 	ADCSRA |= (1<<ADSC);
-	//�������� ����������� �� ����������
+	//переключаем АЦП
 	ADMUX ^= (1<<MUX0);
 	ADMUX ^= (1<<MUX1);
 	while(ADCSRA & (1<<ADSC))
@@ -52,12 +49,10 @@ void batteryPWR()
 		if(((ADC_convert ()) >= TEMPERATURE().BATTERY || !pressSensAns)) 
 		{	
 			BatteryOff;
-			flagBattery = false;
 		}
 		else if(((ADC_convert ()) <= TEMPERATURE().BATTERY - DIFF().BATTERY) && pressSensAns)
 		{
 			BatteryOn;
-			flagBattery = true;
 		}
 		
 	
@@ -69,13 +64,11 @@ void heaterPWR()
 		if(ADC_convert () >= (float)(tempHeater) ) 
 		{
 			HeaterOff;
-			flagHeater = false;
 		}
 	
 		else if(ADC_convert () < (float)(tempHeater - DIFF().HEATER)) 
 		{
 			HeaterOn;
-			flagHeater = true;
 		}
 	
 }
