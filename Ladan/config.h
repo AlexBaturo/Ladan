@@ -76,8 +76,8 @@ const float tempToVolt (const float temp);
 //структура для задания разницы температуры
 struct DIFF
 {
-	const static float HEATER = 0.0;
-	const static float BATTERY = 0.0;
+	const  float HEATER = tempToVolt(2);
+	const  float BATTERY = tempToVolt(45);
 };
 
 
