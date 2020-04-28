@@ -7,7 +7,7 @@ void iniTimerA0(void)
 {
 	//таймер для опроса АЦП TimerA0
 
-	OCR0A = timeToFloat (TIMER_A0); // частота таймера
+	OCR0A = timeToInt (TIMER_A0); // частота таймера
 	TCCR0A |= (1<<WGM01); //выбор режима CTС
 	TCCR0B |= (1 << CS02)|(1 << CS00);  //делитель 256
 	TIMSK0 |= (1 << OCIE0A);

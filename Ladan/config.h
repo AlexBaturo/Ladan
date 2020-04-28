@@ -67,7 +67,7 @@ struct RES_DIV
 
 
 //из мс получаем число для записи в регистр OCR
-float timeToFloat (const float msTime);
+int timeToInt (const int msTime);
 
 //переводи температуру в вольты
 const float tempToVolt (const float temp);

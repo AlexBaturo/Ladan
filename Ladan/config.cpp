@@ -1,9 +1,9 @@
 ﻿#include "config.h"
 
 
-float timeToFloat (const float msTime)
+int timeToInt  (const int msTime)
 {
-	return (float) (F_CPU*msTime*0.001/(2*TIMER_DIVIDER) - 1);
+	return (F_CPU*msTime*0.001/(2*TIMER_DIVIDER) - 1);
 }
 
 //Расчет выходного напряжения в делителе, В
