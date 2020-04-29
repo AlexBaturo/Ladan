@@ -35,8 +35,7 @@ float ADC_convert ()
 {
 	ADCSRA |= (1<<ADSC);
 	//переключаем АЦП
-	ADMUX ^= (1<<MUX0);
-	ADMUX ^= (1<<MUX1);
+	
 	while(ADCSRA & (1<<ADSC))
 	{};
 	int low_adc = ADCL;
@@ -46,11 +45,11 @@ float ADC_convert ()
 
 void batteryPWR()
 {
-		if(((ADC_convert ()) >= TEMPERATURE().BATTERY || !pressSensAns)) 
+		if(((ADC_convert ()) > TEMPERATURE().BATTERY || !pressSensAns)) 
 		{	
 			BatteryOff;
 		}
-		else if(((ADC_convert ()) <= TEMPERATURE().BATTERY - DIFF().BATTERY) && pressSensAns)
+		else if(((ADC_convert ()) < TEMPERATURE().BATTERY ) && pressSensAns)
 		{
 			BatteryOn;
 		}
@@ -61,12 +60,12 @@ void batteryPWR()
 void heaterPWR()
 {
 	
-		if(ADC_convert () >= (float)(tempHeater) ) 
+		if(ADC_convert () > (float)(tempHeater) ) 
 		{
 			HeaterOff;
 		}
 	
-		else if(ADC_convert () < (float)(tempHeater - DIFF().HEATER)) 
+		else if(ADC_convert () < (float)(tempHeater - 0.01)) 
 		{
 			HeaterOn;
 		}
@@ -76,15 +75,12 @@ void heaterPWR()
 
 ISR (TIMER0_COMPA_vect)
 {
-	if(ADCn == MUX0)
-	{
-		ADCn = MUX1;
-		heaterPWR();
-	}
-
-	else if(ADCn == MUX1)
-	{	
-		ADCn = MUX0;
-		batteryPWR();
-	}
+	ADMUX |= (1<<MUX0);
+	ADMUX &= ~(1<<MUX1);
+	heaterPWR();
+	
+	ADMUX |= (1<<MUX1);
+	ADMUX &= ~(1<<MUX0);
+	batteryPWR();
+	
 }

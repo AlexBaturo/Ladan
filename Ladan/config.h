@@ -46,7 +46,7 @@ const uint8_t PRESSURE = PB6;
 const int TIMER_A0 = 300;
 
 /*Период опроса кнопки, мс */
-const int TIMER_A1 = 50;
+const int TIMER_A1 = 500;
 
 //Терморез  B5761-S 103-F40
 struct RES_DIV 
@@ -77,7 +77,7 @@ const float tempToVolt (const float temp);
 struct DIFF
 {
 	const  float HEATER = tempToVolt(2);
-	const  float BATTERY = tempToVolt(45);
+	const  float BATTERY = tempToVolt(2);
 };
 
 
@@ -85,11 +85,11 @@ struct DIFF
 struct TEMPERATURE 
 {
 	//первый режим 
-	const float HEATER1 = tempToVolt(27);
+	const float HEATER1 = tempToVolt(29);
 	//второй режим
     const float HEATER2 = tempToVolt(45);	
 	//макс температура для батареи
-    const float BATTERY = tempToVolt(60);
+    const float BATTERY = tempToVolt(29);
 };
 
 //делитель таймера
