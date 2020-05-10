@@ -27,9 +27,12 @@
 					TCNT1 = 0;
 
 
-//Входы для сигнала с кнопки
-const uint8_t BUTTON_PIN1 = PD1; 
+//Входы для сигнала с кнопки c 2 режимами
+const uint8_t BUTTON_PIN1 = PD0; 
 const uint8_t BUTTON_PIN2 = PD4;
+
+//Входы для сигнала с кнопки одинарной
+const uint8_t BUTTON_PIN = PD2;
 
 //Выходы для управления 
 const uint8_t HEATER = PD7;
@@ -96,8 +99,6 @@ struct TEMPERATURE
 const int TIMER_DIVIDER = 256;
 
 extern float tempHeater;
-extern uint8_t curDiode;
-
 
 
 

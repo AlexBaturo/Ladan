@@ -1,7 +1,8 @@
 #include "ButtonDiods.h"
 
 float tempHeater;
-uint8_t curDiode;
+enum {MODE0, MODE1, MODE2};
+uint8_t curMode = MODE0;
 
 void iniTimerA1(void)
 {
@@ -28,7 +29,7 @@ void initButtonDiodsPins()
 	//HeaterOn;
 	
 	ButtonPinsInit;
-	ButtonPinsOn((1<<BUTTON_PIN2)|(1<<BUTTON_PIN1));
+	ButtonPinsOn((1<<BUTTON_PIN2)|(1<<BUTTON_PIN1)|(1<<BUTTON_PIN));
 
 	iniTimerA1();
 	startTimerA1;
@@ -39,24 +40,33 @@ void initButtonDiodsPins()
 
 ISR (TIMER1_COMPA_vect)
 {	
-	diodeOff((1 << DIODE2)|(1 << DIODE1));
-	diodeOn((1 << curDiode));
 	
-	switch(curDiode)
+	
+	switch(curMode)
 	{
-		case DIODE1:
+		case MODE0:
+		tempHeater = 0;
+		break;
+		case MODE1:
 		tempHeater = TEMPERATURE().HEATER1;
+		diodeOn((1 << DIODE1));
 		break;
-		case DIODE2:
+		case MODE2:
 		tempHeater = TEMPERATURE().HEATER2;
-		break;
+		diodeOn((1 << DIODE2));
 		default:
 		break;
 	}
 
 
-	if(!(ButtonPort & (1<< BUTTON_PIN2)))  curDiode =  DIODE2;
-	else if(!(ButtonPort & (1<< BUTTON_PIN1))) curDiode = DIODE1; 
+	if(!(ButtonPort & (1<< BUTTON_PIN))) 
+	{
+		curMode++;
+
+		while (!(ButtonPort & (1<< BUTTON_PIN))){};
+		diodeOff((1 << DIODE2)|(1 << DIODE1));
+	}
+	if(curMode > MODE2) curMode = MODE0;
 
 
 }
