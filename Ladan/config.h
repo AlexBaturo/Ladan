@@ -22,8 +22,8 @@
 #define ButtonPinsOn(x) PORTD |= x
 #define ButtonPort PIND
 
-#define startTimerA1 TCCR1B |= (1 << CS12);  // запускаем таймер с делителем 256
-#define stopTimerA1 TCCR1B &= ~(1 << CS12); \
+#define startTimerA1 TCCR1B |= (1 << CS12)|(1 << CS10);  // запускаем таймер с делителем 256
+#define stopTimerA1 TCCR1B &= ~((1 << CS12)|(1 << CS10)); \
 					TCNT1 = 0;
 
 
@@ -49,7 +49,7 @@ const uint8_t PRESSURE = PB6;
 const int TIMER_A0 = 300;
 
 /*Период опроса кнопки, мс */
-const int TIMER_A1 = 500;
+const int TIMER_A1 = 300;
 
 //Терморез  B5761-S 103-F40
 struct RES_DIV 

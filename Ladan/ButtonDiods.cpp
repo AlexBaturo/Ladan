@@ -1,7 +1,8 @@
 #include "ButtonDiods.h"
 
-float tempHeater;
 enum {MODE0, MODE1, MODE2};
+
+float tempHeater;
 uint8_t curMode = MODE0;
 
 void iniTimerA1(void)
@@ -10,10 +11,26 @@ void iniTimerA1(void)
 
 	OCR1A = timeToInt(TIMER_A1); // установка регистра совпадения
 	TCCR1B |= (1 << WGM12);  // включить CTC режим
-	TIMSK1 |= (1 << OCIE1A);
-	
+    TIMSK1 |= (1 << OCIE1A);
 }
 
+
+void INT0Enable(bool state)
+{
+	//Управление прерыванием INT0
+
+	if (state)
+	{
+		//EICRA |= (1<<ISC01); //включим прерывания INT0 по нисходящему фронту
+		EIMSK |= (1<<INT0); //разрешим внешние прерывания INT0
+	}
+	else
+	{
+		EIMSK &= ~(1<<INT0);
+		//EICRA &= ~(1<<ISC01);
+	}
+	
+}
 
 
 void initButtonDiodsPins() 
@@ -32,16 +49,24 @@ void initButtonDiodsPins()
 	ButtonPinsOn((1<<BUTTON_PIN2)|(1<<BUTTON_PIN1)|(1<<BUTTON_PIN));
 
 	iniTimerA1();
-	startTimerA1;
+
+	INT0Enable(true);
+
+
 }
 
 
 
-
-ISR (TIMER1_COMPA_vect)
+ISR(INT0_vect)
 {	
 	
-	
+	INT0Enable(false);
+	stopTimerA1;
+	diodeOff((1 << DIODE2)|(1 << DIODE1));
+
+	curMode++;
+	if(curMode > MODE2) curMode = MODE0;
+
 	switch(curMode)
 	{
 		case MODE0:
@@ -57,16 +82,16 @@ ISR (TIMER1_COMPA_vect)
 		default:
 		break;
 	}
-
-
-	if(!(ButtonPort & (1<< BUTTON_PIN))) 
-	{
-		curMode++;
-
-		while (!(ButtonPort & (1<< BUTTON_PIN))){};
-		diodeOff((1 << DIODE2)|(1 << DIODE1));
-	}
-	if(curMode > MODE2) curMode = MODE0;
-
-
+	
+	startTimerA1;
+	
 }
+
+
+ISR(TIMER1_COMPA_vect)
+{
+	INT0Enable(true);
+}
+
+
+
