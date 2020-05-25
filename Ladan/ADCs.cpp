@@ -1,4 +1,6 @@
 #include "ADCs.h"
+#include "Uart.h"
+#include <stdio.h>
 
 int ADCn = MUX0;
 
@@ -7,7 +9,7 @@ void iniTimerA0(void)
 {
 	//таймер для опроса АЦП TimerA0
 
-	OCR0A = timeToInt (TIMER_A0); // частота таймера
+	OCR0A = 255; // частота таймера
 	TCCR0A |= (1<<WGM01); //выбор режима CTС
 	TCCR0B |= (1 << CS02)|(1 << CS00);  //делитель 256
 	TIMSK0 |= (1 << OCIE0A);
@@ -43,33 +45,49 @@ float ADC_convert ()
 	return RES_DIV().AREF*(high_adc*256+low_adc)/1024;
 }
 
-void batteryPWR()
+void sendTemp(char *name, const float volt)
 {
-		if(((ADC_convert ()) > TEMPERATURE().BATTERY || !pressSensAns)) 
+	char str[3];
+	sprintf(str, "%d", (int)VoltToTemp(volt));
+	UARTSend_str(name);
+	UARTSend_str(str);
+	UARTSend_str("    ");
+}
+
+void batteryPWR()
+{		
+		const float volt  = ADC_convert();
+		sendTemp("Battery: ", volt);
+		if((volt) > TEMPFUNC().BATTERY)
 		{	
-			BatteryOff;
+			//BatteryOff;
+			HeaterOff;
 		}
-		else if(((ADC_convert ()) < TEMPERATURE().BATTERY ) && pressSensAns)
+		else if(((volt) < (float)(TEMPFUNC().MINBATTERY) ))
 		{
-			BatteryOn;
+			//BatteryOn;
+			HeaterOn;
 		}
 		
-	
+	    UARTSend_str("\n\r");
 }
 
 void heaterPWR()
 {
-	
-		if(ADC_convert () > (float)(tempHeater) ) 
+		const float volt  = ADC_convert();
+		sendTemp("Heater: ", volt);
+		if(volt > (float)(tempHeater) ) 
 		{
 			HeaterOff;
 		}
 	
-		else if(ADC_convert () < (float)(tempHeater - 0.01)) 
+		else if(volt < (float)(tempDiff)) 
 		{
 			HeaterOn;
 		}
-	
+		
+		
+		
 }
 
 

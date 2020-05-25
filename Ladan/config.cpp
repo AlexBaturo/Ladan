@@ -7,7 +7,7 @@ int timeToInt  (const int msTime)
 }
 
 //Расчет выходного напряжения в делителе, В
-const float toVolt (const double termoRes)
+const float toVolt (const float termoRes)
 {
 	return RES_DIV().AREF*RES_DIV().R/(RES_DIV().R + termoRes);
 }
@@ -26,4 +26,19 @@ float bValue(float T, float R)
 	float R0 = RES_DIV().R;
 	float T0 = RES_DIV().T0;
 	return log(R/R0)/(1/(T+273) - 1/T0);
+}
+
+
+const float toRes (const float U)
+{
+	return RES_DIV().AREF*RES_DIV().R/U - RES_DIV().R;
+}
+
+//Функция переводит  Вольты в температуру
+const float	 VoltToTemp (const float U)
+{	
+	const float termoRes = toRes(U);
+	float temper = 1/RES_DIV().T0 + 1/(RES_DIV().B)*log(termoRes/RES_DIV().R0); 
+	float realTemp = 1/temper - 273;
+	return realTemp;
 }

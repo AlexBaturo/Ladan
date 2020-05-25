@@ -8,6 +8,7 @@
 
 #include "ButtonDiods.h"
 #include "ADCs.h"
+#include "Uart.h"
 
 
 
@@ -16,10 +17,11 @@ int main(void)
 	cli();  // Отключение глобального прерывания
 	initADC();
 	initButtonDiodsPins();
+	UARTInit();
 	sei();
     /* Replace with your application code */
     while (1) 
-    {
+    {	
 		//testADC();
     }
 }
