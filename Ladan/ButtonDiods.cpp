@@ -3,6 +3,7 @@
 enum {MODE0, MODE1, MODE2};
 
 float tempHeater;
+bool is_sleeping = false;
 uint8_t curMode = MODE0;
 
 void iniTimerA1(void)
@@ -50,7 +51,7 @@ void initButtonDiodsPins()
 
 	iniTimerA1();
 
-	INT0Enable(true);
+	startTimerA1;
 
 
 }
@@ -61,11 +62,11 @@ ISR(INT0_vect)
 {	
 	
 	INT0Enable(false);
-	stopTimerA1;
 	diodeOff((1 << DIODE2)|(1 << DIODE1));
-
 	curMode++;
 	if(curMode > MODE2) curMode = MODE0;
+	is_sleeping = false;
+
 
 	switch(curMode)
 	{
@@ -91,6 +92,9 @@ ISR(INT0_vect)
 ISR(TIMER1_COMPA_vect)
 {
 	INT0Enable(true);
+	stopTimerA1;
+	if(curMode == MODE0) is_sleeping = true;
+
 }
 
 

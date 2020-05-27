@@ -9,6 +9,7 @@
 #include "ButtonDiods.h"
 #include "ADCs.h"
 #include "Uart.h"
+#include <avr/sleep.h>
 
 
 
@@ -18,11 +19,16 @@ int main(void)
 	initADC();
 	initButtonDiodsPins();
 	UARTInit();
+	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	sei();
     /* Replace with your application code */
     while (1) 
     {	
-		//testADC();
+		if(is_sleeping){
+			sleep_enable();
+			sleep_cpu();
+		}
+		else sleep_disable();
     }
 }
 
