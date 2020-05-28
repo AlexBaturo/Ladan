@@ -9,12 +9,16 @@
 #include "ButtonDiods.h"
 #include "ADCs.h"
 #include "Uart.h"
+#include <avr/power.h>
 #include <avr/sleep.h>
 
 
 
+
+
 int main(void)
-{
+{	
+	clock_prescale_set(clock_div_2);
 	cli();  // Отключение глобального прерывания
 	initADC();
 	initButtonDiodsPins();
