@@ -9,7 +9,7 @@
 #include "ButtonDiods.h"
 #include "ADCs.h"
 #include "Uart.h"
-#include <avr/power.h>
+#include "PWM.h"
 #include <avr/sleep.h>
 
 
@@ -25,6 +25,8 @@ int main(void)
 	UARTInit();
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	sei();
+
+	pwmPinsManage pwm = pwmPinsManage();
     /* Replace with your application code */
     while (1) 
     {	
@@ -33,6 +35,7 @@ int main(void)
 			sleep_cpu();
 		}
 		else sleep_disable();
+			pwm.launchPwm(color_values.red, color_values.green);
     }
 }
 

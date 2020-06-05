@@ -5,6 +5,7 @@ enum {MODE0, MODE1, MODE2};
 float tempHeater;
 bool is_sleeping = false;
 uint8_t curMode = MODE0;
+COLOR_VALUES color_values = COLOR_VALUES();
 
 void iniTimerA1(void)
 {
@@ -76,10 +77,12 @@ ISR(INT0_vect)
 		case MODE1:
 		tempHeater = TEMPERATURE().HEATER1;
 		diodeOn((1 << DIODE1));
+		color_values = {255, 0};
 		break;
 		case MODE2:
 		tempHeater = TEMPERATURE().HEATER2;
 		diodeOn((1 << DIODE2));
+		color_values = {255, 255};
 		default:
 		break;
 	}

@@ -27,6 +27,8 @@
 					TCNT1 = 0;
 
 
+const uint8_t RED = PC5;
+const uint8_t GREEN = PC4;
 //Входы для сигнала с кнопки c 2 режимами
 const uint8_t BUTTON_PIN1 = PD0; 
 const uint8_t BUTTON_PIN2 = PD4;
@@ -93,8 +95,13 @@ struct TEMPERATURE
     const float HEATER2 = tempToVolt(45);	
 	//макс температура для батареи
     const float BATTERY = tempToVolt(29);
+struct COLOR_VALUES
+{
+	 uint32_t red;
+	 uint32_t green; 
 };
 
+extern COLOR_VALUES color_values;
 //делитель таймера
 const int TIMER_DIVIDER = 256;
 
