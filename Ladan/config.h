@@ -93,6 +93,7 @@ struct TEMPERATURE
 	const float HEATER1 = tempToVolt(29);
 	//второй режим
     const float HEATER2 = tempToVolt(45);	
+	const float HEATER_OFF = -274;
 	//макс температура для батареи
     const float BATTERY = tempToVolt(29);
 struct COLOR_VALUES
@@ -107,6 +108,6 @@ const int TIMER_DIVIDER = 256;
 
 extern float tempHeater;
 
-
+extern bool is_sleeping;
 
 #endif /* CONFIG_H_ */
