@@ -86,15 +86,15 @@ const float	 VoltToTemp (const float U);
 struct TEMPERATURE 
 {
 	//первый режим 
-	const float HEATER1 = tempToVolt(29);
+	const float HEATER1 = 85;
 	//второй режим
-    const float HEATER2 = tempToVolt(45);	
+    const float HEATER2 = 120;	
 	const float HEATER_OFF = -274;
 	//макс температура для батареи
-    const float BATTERY = tempToVolt(29);
+    const float BATTERY = tempToVolt(60);
 
-	const  float DIFFBATTERY = tempToVolt(2);
-	const  float DIFFHEATER = tempToVolt(2);
+	const  float DIFFBATTERY = 10;
+	const  float DIFFHEATER = 10;
 };
 
 struct COLOR_VALUES
