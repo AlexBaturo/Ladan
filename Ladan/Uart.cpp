@@ -9,18 +9,18 @@
 
 void UARTInit(void) {
 	UBRR0H = 0;
-	UBRR0L = 6; //baud rate 9600
+	UBRR0L = 51; //baud rate 9600
 	UCSR0B = (1<<TXEN0);
 	UCSR0C = (1<<UCSZ01)|(1<<UCSZ00); //8 bit, 1 stop bit
 }
 
-void UARTSend(uint8_t data)//	Отправка байта
+void UARTSend(const char data)//	Отправка байта
 {
 	while(!(UCSR0A & (1<<UDRE0)));
 	UDR0 = data;
 }
 
-void UARTSend_str(const unsigned char *s)//  Отправка строки
+void UARTSend_str(const char *s)//  Отправка строки
 {
 	while (*s != 0) UARTSend(*s++);
 }

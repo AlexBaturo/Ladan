@@ -1,4 +1,5 @@
-#include "ButtonDiods.h"
+﻿#include "ButtonDiods.h"
+#include "Uart.h"
 
 
 enum {MODE0, MODE1, MODE2};
@@ -98,7 +99,7 @@ ISR(PCINT2_vect)
 			unsigned count = 0;
 			while(!(PIND & (1<<PD2)))
 				{	
-					if(count++ > 30000) 
+					if(count++ > 300) 
 						{
 							diodeOff((1 << DIODE1)|(1<<DIODE2));
 							if(is_sleeping) 
@@ -118,10 +119,10 @@ ISR(PCINT2_vect)
 							break;
 						}
 
-// 					char str[3];
-// 					sprintf(str, "%d", (int)count);
-// 					UARTSend_str(str);
-// 					UARTSend_str("\n\r");
+ 					char str[3];
+ 					sprintf(str, "%d", (int)count);
+ 					UARTSend_str(str);
+ 					UARTSend_str("\n\r");
 				}
 	
 			if(!is_sleeping )

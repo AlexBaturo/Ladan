@@ -11,14 +11,14 @@
 #include "Uart.h"
 #include "PWM.h"
 #include <avr/sleep.h>
-
+#include <avr/power.h>
 
 
 
 
 int main(void)
 {	
-	clock_prescale_set(clock_div_2);
+	clock_prescale_set(clock_div_1);
 	cli();  // Отключение глобального прерывания
 	initADC();
 	initButtonDiodsPins();
@@ -30,12 +30,16 @@ int main(void)
     /* Replace with your application code */
     while (1) 
     {	
+		wdt_disable();
 		if(is_sleeping){
 			sleep_enable();
 			sleep_cpu();
 		}
-		else sleep_disable();
-			pwm.launchPwm(color_values.red, color_values.green);
+		else 
+		{	
+			//pwm.launchPwm(color_values.red, color_values.green);
+			sleep_disable();
+		}	
     }
 }
 

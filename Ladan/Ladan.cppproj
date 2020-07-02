@@ -40,6 +40,7 @@
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
+    <avrtool />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -168,10 +169,22 @@
     <Compile Include="config.cpp">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="PWM.cpp">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.cpp">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="PWM.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Uart.cpp">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="Uart.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>

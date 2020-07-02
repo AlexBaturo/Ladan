@@ -1,6 +1,6 @@
 #include "ADCs.h"
 #include "Uart.h"
-#include <stdio.h>
+
 
 int ADCn = MUX0;
 
@@ -45,10 +45,10 @@ float ADC_convert ()
 	return RES_DIV().AREF*(high_adc*256+low_adc)/1024;
 }
 
-void sendTemp(char *name, const float volt)
+void sendTemp(char *name, const float temp)
 {
 	char str[3];
-	sprintf(str, "%d", (int)VoltToTemp(volt));
+	sprintf(str, "%d", (int)temp);
 	UARTSend_str(name);
 	UARTSend_str(str);
 	UARTSend_str("    ");
@@ -56,17 +56,17 @@ void sendTemp(char *name, const float volt)
 
 void batteryPWR()
 {		
-		const float volt  = ADC_convert();
-		sendTemp("Battery: ", volt);
-		if((volt) > TEMPFUNC().BATTERY)
+		const float temp = VoltToTemp(ADC_convert());
+		sendTemp("Battery: ", temp);
+		if(temp > TEMPERATURE().BATTERY)
 		{	
 			//BatteryOff;
-			HeaterOff;
+			//HeaterOff;
 		}
-		else if(((volt) < (float)(TEMPFUNC().MINBATTERY) ))
+		else if(temp < (float)TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY)
 		{
 			//BatteryOn;
-			HeaterOn;
+			//HeaterOn;
 		}
 		
 	    UARTSend_str("\n\r");
@@ -74,14 +74,14 @@ void batteryPWR()
 
 void heaterPWR()
 {
-		const float volt  = ADC_convert();
-		sendTemp("Heater: ", volt);
-		if(volt > (float)(tempHeater) ) 
+		const float temp = VoltToTemp(ADC_convert());
+		sendTemp("Heater: ", temp);
+		if(temp > (float)(tempHeater))
 		{
 			HeaterOff;
 		}
 	
-		else if(volt < (float)(tempDiff)) 
+		else if(temp < (float)((tempHeater) - TEMPERATURE().DIFFHEATER)) 
 		{
 			HeaterOn;
 		}
@@ -100,5 +100,6 @@ ISR (TIMER0_COMPA_vect)
 	ADMUX |= (1<<MUX1);
 	ADMUX &= ~(1<<MUX0);
 	batteryPWR();
+	wdt_reset();
 	
 }
