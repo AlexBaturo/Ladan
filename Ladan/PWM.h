@@ -10,9 +10,9 @@
 #define PWM_H_
 #include "config.h"
 
-#define pwmDiodeInit DDRC |= (1<<RED)|(1<<GREEN);
-#define pwmDiodeOn(x) PORTC |= (1<<x)
-#define pwmDiodeOff(x) PORTC &= ~(1<<x)
+#define pwmDiodeInit DDRD |= (1<<RED)|(1<<GREEN);
+#define pwmDiodeOn(x) PORTD |= (1<<x)
+#define pwmDiodeOff(x) PORTD &= ~(1<<x)
 
 
 struct pwmPin

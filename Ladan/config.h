@@ -27,8 +27,8 @@
 					TCNT1 = 0;
 
 
-const uint8_t RED = PC5;
-const uint8_t GREEN = PC4;
+const uint8_t RED = PD5;
+const uint8_t GREEN = PD6;
 //Входы для сигнала с кнопки c 2 режимами
 const uint8_t BUTTON_PIN1 = PD0; 
 const uint8_t BUTTON_PIN2 = PD4;
@@ -37,8 +37,8 @@ const uint8_t BUTTON_PIN2 = PD4;
 const uint8_t BUTTON_PIN = PD2;
 
 //Выходы для управления 
-const uint8_t HEATER = PD7;
-const uint8_t BATTERY = PD3; 
+const uint8_t HEATER = PD3;
+const uint8_t BATTERY = PD4; 
 
 //Выходы управление диодами
 const uint8_t DIODE1 = PB1;
