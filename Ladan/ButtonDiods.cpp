@@ -140,7 +140,7 @@ ISR(PCINT2_vect)
 							case MODE2:
 							tempHeater = TEMPERATURE().HEATER2;
 							diodeOn((1 << DIODE2));
-							color_values = {255, 255};
+							color_values = {0, 255};
 							default:
 							break;
 						}

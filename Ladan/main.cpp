@@ -37,7 +37,7 @@ int main(void)
 		}
 		else 
 		{	
-			//pwm.launchPwm(color_values.red, color_values.green);
+			pwm.launchPwm(color_values.red, color_values.green);
 			sleep_disable();
 		}	
     }
