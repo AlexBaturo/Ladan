@@ -18,7 +18,7 @@
 
 int main(void)
 {	
-	clock_prescale_set(clock_div_1);
+	//clock_prescale_set(clock_div_1);
 	cli();  // Отключение глобального прерывания
 	initADC();
 	initButtonDiodsPins();
