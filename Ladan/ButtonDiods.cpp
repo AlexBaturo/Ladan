@@ -1,4 +1,4 @@
-﻿#include "ButtonDiods.h"
+#include "ButtonDiods.h"
 #include "Uart.h"
 
 
@@ -105,7 +105,7 @@ ISR(PCINT2_vect)
 							if(is_sleeping) 
 								{
 									is_sleeping = false;
-									PORTD |= (1<<HEATER);
+									//PORTD |= (1<<HEATER);
 									
 								}
 							else
