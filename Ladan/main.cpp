@@ -10,6 +10,7 @@
 #include "ADCs.h"
 #include "Uart.h"
 #include "PWM.h"
+#include "ChargeCheck.h"
 #include <avr/sleep.h>
 #include <avr/power.h>
 
@@ -23,13 +24,17 @@ int main(void)
 	initADC();
 	initButtonDiodsPins();
 	UARTInit();
+	InitCharge();
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	sei();
 
 	pwmPinsManage pwm = pwmPinsManage();
+	int arg;
+	
     /* Replace with your application code */
     while (1) 
     {	
+		arg = Signal();
 		wdt_disable();
 		if(is_sleeping){
 			sleep_enable();
@@ -37,9 +42,14 @@ int main(void)
 		}
 		else 
 		{	
-			pwm.launchPwm(color_values.red, color_values.green);
+			if(arg == 0) pwm.launchPwm(color_values.red, color_values.green);
 			sleep_disable();
 		}	
+		if(arg != 0)
+		{
+			sleep_disable();
+			Charge(arg);
+		}
     }
 }
 
