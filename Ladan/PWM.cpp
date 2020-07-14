@@ -1,17 +1,19 @@
 #include "PWM.h"
 
 
-pwmPinsManage::pwmPinsManage()
+pwmPinsManage::pwmPinsManage(uint8_t RED, uint8_t GREEN)
 {
-	pwmDiodeInit;
+	pwmDiodeInit(RED, GREEN);
+	_RED = RED;
+	_GREEN = GREEN;
 }
 
 void pwmPinsManage::launchPwm(const uint32_t& value_red,
-							  const uint32_t& value_green)
+const uint32_t& value_green)
 {
 	if (count > max) count = 0;
-	pwmMode({RED, value_red});
-	pwmMode({GREEN, value_green});
+	pwmMode({_RED, value_red});
+	pwmMode({_GREEN, value_green});
 	count++;
 }
 

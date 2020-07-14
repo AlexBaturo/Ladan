@@ -4,13 +4,13 @@
  * Created: 06.06.2020 1:28:59
  *  Author: 111
  */ 
-
+ 
+ #include <avr/io.h>
 
 #ifndef PWM_H_
 #define PWM_H_
-#include "config.h"
 
-#define pwmDiodeInit DDRD |= (1<<RED)|(1<<GREEN);
+#define pwmDiodeInit(RED, GREEN) DDRD |= (1<<RED)|(1<<GREEN);
 #define pwmDiodeOn(x) PORTD |= (1<<x)
 #define pwmDiodeOff(x) PORTD &= ~(1<<x)
 
@@ -27,12 +27,15 @@ class pwmPinsManage
 
 public:
 	
-	pwmPinsManage();
+	pwmPinsManage(uint8_t RED, uint8_t GREEN );
 	void launchPwm (const uint32_t& value_red, 
 					const uint32_t& value_green);
 private:
-	uint32_t count =0;
+	uint32_t count = 0;
 	const uint32_t max = 255;
+
+	int _RED;
+	int _GREEN;
 
 	void pwmMode(const struct pwmPin& p);
 };
