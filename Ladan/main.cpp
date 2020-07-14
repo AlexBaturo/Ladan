@@ -28,7 +28,7 @@ int main(void)
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	sei();
 
-	pwmPinsManage pwm = pwmPinsManage();
+	//int arg;
 	int arg;
 	
     /* Replace with your application code */

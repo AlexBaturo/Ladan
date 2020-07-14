@@ -1,13 +1,17 @@
 ﻿#include "ButtonDiods.h"
 #include "Uart.h"
+#include "PWM.h"
 
 
 enum {MODE0, MODE1, MODE2};
 
 float tempHeater;
+uint32_t red;
+uint32_t green;
+
 bool is_sleeping = true;
 uint8_t curMode = MODE1;
-COLOR_VALUES color_values = COLOR_VALUES();
+pwmPinsManage pwm = pwmPinsManage(RED, GREEN);
 
 
 void PCINTEnable(bool state)
@@ -87,6 +91,7 @@ void initButtonDiodsPins()
 
 Bounce bounce = Bounce();
 
+
 ISR(PCINT2_vect)
 {	
 	
@@ -101,7 +106,7 @@ ISR(PCINT2_vect)
 				{	
 					if(count++ > 300) 
 						{
-							diodeOff((1 << DIODE1)|(1<<DIODE2));
+							//diodeOff((1 << DIODE1)|(1<<DIODE2));
 							if(is_sleeping) 
 								{
 									is_sleeping = false;
@@ -113,6 +118,7 @@ ISR(PCINT2_vect)
 									//DDRD &= ~(1<<HEATER);
 									PORTD &= ~(1<<HEATER);
 									is_sleeping = true;
+									pwm.launchPwm(0, 0);
 									//wdt_disable();
 									tempHeater = TEMPERATURE().HEATER_OFF;
 								} 
@@ -127,22 +133,22 @@ ISR(PCINT2_vect)
 	
 			if(!is_sleeping )
 				{
-					diodeOff((1 << DIODE1)|(1<<DIODE2));
+					//diodeOff((1 << DIODE1)|(1<<DIODE2));
 					curMode++;
 					if(curMode > MODE2) curMode = MODE1;
 					switch(curMode)
 						{
 							case MODE1:
 							tempHeater = TEMPERATURE().HEATER1;
-							diodeOn((1 << DIODE1));
-							color_values = {255, 0};
+	     					pwm.launchPwm(255, 0);
 							break;
 							case MODE2:
 							tempHeater = TEMPERATURE().HEATER2;
-							diodeOn((1 << DIODE2));
-							color_values = {0, 255};
+ 							pwm.launchPwm(0, 255);	
 							default:
 							break;
+
+						
 						}
 					}
 			}
