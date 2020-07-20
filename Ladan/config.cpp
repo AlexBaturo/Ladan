@@ -29,16 +29,22 @@ float bValue(float T, float R)
 }
 
 
-const float toRes (const float U)
+const float Uin (const float Uout)
 {
-	return RES_DIV().AREF*RES_DIV().R/U - RES_DIV().R;
+	return Uout*(10000 + 2000)/2000;
+}
+
+const float toRes (const float Uout, const float POWER)
+{
+	float PWR = Uin(POWER);
+	return Uout*RES_DIV().R/(PWR-Uout);
 }
 
 //Функция переводит  Вольты в температуру
-const float	 VoltToTemp (const float U)
-{	
-	const float termoRes = toRes(U);
-	float temper = 1/RES_DIV().T0 + 1/(RES_DIV().B)*log(termoRes/RES_DIV().R0); 
+const float	 VoltToTemp (const float U, float POWER)
+{
+	const float termoRes = toRes(U, POWER);
+	float temper = 1/RES_DIV().T0 + 1/(RES_DIV().B)*log(termoRes/RES_DIV().R0);
 	float realTemp = 1/temper - 273;
 	return realTemp;
 }

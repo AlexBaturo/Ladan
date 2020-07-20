@@ -57,7 +57,7 @@ const int TIMER_A1 = 300;
 struct RES_DIV 
 {
 	//референсное напряжение, В
-	const static float AREF = 4.92;
+	const static float AREF = 1.1;
 	//Резистор в делителе, Ом
 	const static float R = 10000;
 	//B-value , константа из дока
@@ -79,7 +79,9 @@ const float tempToVolt (const float temp);
 
 
 //структура для задания разницы температуры
-const float	 VoltToTemp (const float U);
+const float	 VoltToTemp (const float U, float POWER);
+
+const float Uin (const float Uout);
 
 
 //Выставляем температурные режимы

@@ -2,6 +2,7 @@
 #include "Uart.h"
 
 
+float temp;
 int ADCn = MUX0;
 
 
@@ -22,12 +23,19 @@ void initADC()
 	termoPortInit;
 	pressSensInit;
 
+	DDRC |= (1<<PC4);
+	PORTC |= (1<<PC4);
+
+	DDRC |= (1<<PC0);
+	PORTC |= (1<<PC0);
+
 	ADCSRA |= (1<<ADEN)// разрешаем работу АЦП
 	|(1<<ADSC)//инициализируем работу АЦП
 	|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);//частота работы ацп
-
-	ADMUX |= 0 //AREF, internal Vref turned off
-	|(1<<MUX0); // работает ADC1
+	
+	ADMUX |= (1<<REFS1)|(1<<REFS0);
+// 	ADMUX |= 0 //AREF, internal Vref turned off
+// 	|(1<<MUX0); // работает ADC1
 
 	iniTimerA0();
 	
@@ -35,13 +43,19 @@ void initADC()
 
 float ADC_convert ()
 {
-	ADCSRA |= (1<<ADSC);
+	int low_adc;
+	int high_adc;
+
 	//переключаем АЦП
-	
-	while(ADCSRA & (1<<ADSC))
-	{};
-	int low_adc = ADCL;
-	int high_adc = ADCH;
+	for(int i = 0; i<3 ; i++)
+	{
+		ADCSRA |= (1<<ADSC);
+		while(ADCSRA & (1<<ADSC))
+		{};
+
+		low_adc = ADCL;
+		high_adc = ADCH;
+	}
 	return RES_DIV().AREF*(high_adc*256+low_adc)/1024;
 }
 
@@ -56,27 +70,27 @@ void sendTemp(char *name, const float temp)
 
 void batteryPWR()
 {		
-		const float temp = VoltToTemp(ADC_convert());
-		sendTemp("Battery: ", temp);
-		if(temp > TEMPERATURE().BATTERY)
-		{	
-			//BatteryOff;
-			//HeaterOff;
-		}
-		else if(temp < (float)TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY)
-		{
-			//BatteryOn;
-			//HeaterOn;
-		}
+		const float heat = VoltToTemp(ADC_convert(), temp);
+		sendTemp("Battery: ", heat);
+// 		if(temp > TEMPERATURE().BATTERY)
+// 		{	
+// 			//BatteryOff;
+// 			//HeaterOff;
+// 		}
+// 		else if(temp < (float)TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY)
+// 		{
+// 			//BatteryOn;
+// 			//HeaterOn;
+// 		}
 		
 	    UARTSend_str("\n\r");
 }
 
 void heaterPWR()
 {
-		const float temp = VoltToTemp(ADC_convert());
-		sendTemp("Heater: ", temp);
-		if(temp > (float)(tempHeater))
+		const float heat = VoltToTemp(ADC_convert(), temp);
+		sendTemp("Heater: ", heat);
+		if(heat > (float)(tempHeater))
 		{
 			HeaterOff;
 		}
@@ -87,19 +101,30 @@ void heaterPWR()
 		}
 		
 		
-		
+		UARTSend_str("   ");
+}
+
+void power()
+{
+	temp = ADC_convert();
+	sendTemp("Power: ", 1000*Uin(temp));
+	
+	UARTSend_str("   ");
+	
 }
 
 
 ISR (TIMER0_COMPA_vect)
-{
-	ADMUX |= (1<<MUX0);
-	ADMUX &= ~(1<<MUX1);
-	heaterPWR();
-	
-	ADMUX |= (1<<MUX1);
-	ADMUX &= ~(1<<MUX0);
-	batteryPWR();
-	wdt_reset();
+{	
+	 ADMUX &= ~(1<<MUX0);
+	 ADMUX |= (1<<MUX1);
+	 heaterPWR();
+
+	 ADMUX |= (1<<MUX1)|(1<<MUX0);
+	 power();
+		
+	 ADMUX |= (1<<MUX0); 
+	 ADMUX &= ~(1<<MUX1);
+	 batteryPWR();
 	
 }
