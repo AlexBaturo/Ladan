@@ -9,6 +9,7 @@
  #include "config.h"
  #include "PWM.h"
  #include "ButtonDiods.h"
+ #include <avr/sleep.h>
 
  void PCINTEnable1(bool state)
 {
@@ -47,13 +48,17 @@
 
 ISR(PCINT0_vect)
 {
+	
+	PORTD &= ~(1<<HEATER);
 	PCINTEnable(false);
 	while(!(PINB & (1<<PB0)))
 	{
-		if(!(PINB & (1<<PB0))) pwm1.launchPwm(255, 150);
-		else pwm1.launchPwm(0, 255);
+		if(!(PINB & (1<<PB1))) pwm1.launchPwm(0, 255);
+		else pwm1.launchPwm(255, 150);
 	}
 
 	pwm1.launchPwm(0, 0);
 	PCINTEnable(true);
+	is_sleeping = true;
+
 }

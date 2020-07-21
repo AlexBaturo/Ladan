@@ -106,10 +106,10 @@ ISR(PCINT2_vect)
 				{	
 					if(count++ > 300) 
 						{
-							//diodeOff((1 << DIODE1)|(1<<DIODE2));
 							if(is_sleeping) 
 								{
 									is_sleeping = false;
+									curMode = MODE1;
 									//PORTD |= (1<<HEATER);
 									
 								}
@@ -134,7 +134,7 @@ ISR(PCINT2_vect)
 			if(!is_sleeping )
 				{
 					//diodeOff((1 << DIODE1)|(1<<DIODE2));
-					curMode++;
+					
 					if(curMode > MODE2) curMode = MODE1;
 					switch(curMode)
 						{
@@ -150,6 +150,7 @@ ISR(PCINT2_vect)
 
 						
 						}
+						curMode++;
 					}
 			}
 	
