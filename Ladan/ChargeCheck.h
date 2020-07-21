@@ -8,10 +8,9 @@
 
 #ifndef CHARGECHECK_H_
 #define CHARGECHECK_H_
+#include <avr/interrupt.h>
 
 
-void Charge(int arg);
-int Signal();
 void InitCharge();
 
 

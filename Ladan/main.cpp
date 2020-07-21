@@ -28,13 +28,12 @@ int main(void)
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	sei();
 
-	//int arg;
-	int arg;
+	
 	
     /* Replace with your application code */
     while (1) 
     {	
-		arg = Signal();
+		
 		wdt_disable();
 		if(is_sleeping){
 			sleep_enable();
@@ -42,14 +41,9 @@ int main(void)
 		}
 		else 
 		{	
-			if(arg == 0) pwm.launchPwm(color_values.red, color_values.green);
+			//if(arg == 0) pwm.launchPwm(color_values.red, color_values.green);
 			sleep_disable();
 		}	
-		if(arg != 0)
-		{
-			sleep_disable();
-			Charge(arg);
-		}
     }
 }
 

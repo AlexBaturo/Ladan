@@ -9,6 +9,6 @@
 #include "config.h"
 
 void initButtonDiodsPins();
-
+void PCINTEnable(bool state);
 
 #endif 

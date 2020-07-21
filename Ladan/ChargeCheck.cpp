@@ -7,26 +7,53 @@
 
  #include "ChargeCheck.h"
  #include "config.h"
+ #include "PWM.h"
+ #include "ButtonDiods.h"
 
- void InitCharge()
- {
-	DDRB &= ~((1<<PB1)|(1<<PB0));
-	PORTB |= (1<<PB1)|(1<<PB0);
-
- }
-
-int Signal()
+ void PCINTEnable1(bool state)
 {
-	if(!(PINB & (1<<PB0)))  return 1;
-	if(!(PINB & (1<<PB1)))  return 2;
-	return 0;
+	 //”правление прерыванием INT0
+
+	 if (state)
+	 {
+		 PCMSK0 |= (1<<PCINT0);
+		 PCICR |= (1<<PCIE0);
+	 }
+	 else
+	 {
+	
+		 PCMSK0 &= ~(1<<PCINT0);
+		 PCICR &= ~(1<<PCIE0);
+	 }
 }
 
 
- void Charge(int arg)
- {	
-	PORTD &= !((1<<PD5)|(1<<PD6));
-	if(arg == 1) PORTD |= (1<<PD5);
-	if(arg == 2) PORTD |= (1<<PD6);
+ void InitCharge()
+ {
+	 PCINTEnable1(true);
+
+	DDRB &= ~(1<<PB0);
+	PORTB |= (1<<PB0);
+
+	DDRB &= ~(1<<PB1);
+	PORTB |= (1<<PB1);
+
+	DDRD |= (1<<PD5);
+	DDRD |= (1<<PD6);
 
  }
+
+ pwmPinsManage pwm1 = pwmPinsManage(RED, GREEN);
+
+ISR(PCINT0_vect)
+{
+	PCINTEnable(false);
+	while(!(PINB & (1<<PB0)))
+	{
+		if(!(PINB & (1<<PB0))) pwm1.launchPwm(255, 150);
+		else pwm1.launchPwm(0, 255);
+	}
+
+	pwm1.launchPwm(0, 0);
+	PCINTEnable(true);
+}
