@@ -70,7 +70,7 @@ void sendTemp(char *name, const float temp)
 
 void batteryPWR()
 {		
-		const float heat = VoltToTemp(ADC_convert(), temp);
+		const float heat = VoltToTemp1(ADC_convert(), temp);
 		sendTemp("Battery: ", heat);
 // 		if(temp > TEMPERATURE().BATTERY)
 // 		{	
@@ -120,7 +120,10 @@ ISR (TIMER0_COMPA_vect)
 	 ADMUX |= (1<<MUX1);
 	 heaterPWR();
 
+	 ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
+	 batteryPWR();
 	 ADMUX |= (1<<MUX1)|(1<<MUX0);
+	 ADMUX &=~(1<<MUX2);
 	 power();
 		
 	 ADMUX |= (1<<MUX0); 

@@ -54,7 +54,7 @@ const int TIMER_A0 = 300;
 const int TIMER_A1 = 300;
 
 //Терморез  B5761-S 103-F40
-struct RES_DIV 
+struct RES_DIV
 {
 	//референсное напряжение, В
 	const static float AREF = 1.1;
@@ -62,6 +62,22 @@ struct RES_DIV
 	const static float R = 10000;
 	//B-value , константа из дока
 	const static float B = 3988;
+	//Нормальная температура резистора, К
+	const static float T0 = 298;
+	//Сопротивление при норм темп, Ом
+	const static float R0 = 10000;
+
+};
+
+
+struct RES_DIV1
+{
+	//референсное напряжение, В
+	const static float AREF = 1.1;
+	//Резистор в делителе, Ом
+	const static float R = 75000;
+	//B-value , константа из дока
+	const static float B = 4050;
 	//Нормальная температура резистора, К
 	const static float T0 = 298;
 	//Сопротивление при норм темп, Ом
@@ -82,6 +98,8 @@ const float tempToVolt (const float temp);
 const float	 VoltToTemp (const float U, float POWER);
 
 const float Uin (const float Uout);
+
+const float	 VoltToTemp1 (const float U, float POWER);
 
 
 //Выставляем температурные режимы
