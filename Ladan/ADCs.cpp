@@ -3,7 +3,7 @@
 
 
 float temp;
-int ADCn = MUX0;
+bool batteryFlag = true;
 
 
 void iniTimerA0(void)
@@ -72,14 +72,14 @@ void batteryPWR()
 {		
 		const float heat = VoltToTemp1(ADC_convert(), temp);
 		sendTemp("Battery: ", heat);
-// 		if(temp > TEMPERATURE().BATTERY)
-// 		{	
-// 			//BatteryOff;
-// 			//HeaterOff;
-// 		}
-// 		else if(temp < (float)TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY)
-// 		{
-// 			//BatteryOn;
+		if(temp > TEMPERATURE().BATTERY)
+		{	
+			batteryFlag = false;
+		}
+		else if(temp < (float)TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY)
+		{
+			batteryFlag = true;
+		}
 // 			//HeaterOn;
 // 		}
 		
@@ -90,15 +90,15 @@ void heaterPWR()
 {
 		const float heat = VoltToTemp(ADC_convert(), temp);
 		sendTemp("Heater: ", heat);
-		if(heat > (float)(tempHeater))
-		{
-			HeaterOff;
-		}
-	
-		else if(temp < (float)((tempHeater) - TEMPERATURE().DIFFHEATER)) 
-		{
-			HeaterOn;
-		}
+// 		if(heat > (float)(tempHeater))
+// 		{
+// 			HeaterOff;
+// 		}
+// 	
+// 		else if((temp < (float)((tempHeater) - TEMPERATURE().DIFFHEATER)) && batteryFlag) 
+// 		{
+// 			HeaterOn;
+// 		}
 		
 		
 		UARTSend_str("   ");
