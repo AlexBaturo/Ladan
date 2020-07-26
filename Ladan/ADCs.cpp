@@ -72,11 +72,11 @@ void batteryPWR()
 {		
 		const float heat = VoltToTemp1(ADC_convert(), temp);
 		sendTemp("Battery: ", heat);
-		if(temp > TEMPERATURE().BATTERY)
+		if(heat > TEMPERATURE().BATTERY)
 		{	
 			batteryFlag = false;
 		}
-		else if(temp < (float)TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY)
+		else if(heat < (float)(TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY))
 		{
 			batteryFlag = true;
 		}
