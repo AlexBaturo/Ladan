@@ -90,15 +90,15 @@ void heaterPWR()
 {
 		const float heat = VoltToTemp(ADC_convert(), temp);
 		sendTemp("Heater: ", heat);
-// 		if(heat > (float)(tempHeater))
-// 		{
-// 			HeaterOff;
+		if(heat > (float)(tempHeater))
+		{
+			HeaterOff;
 // 		}
-// 	
-// 		else if((temp < (float)((tempHeater) - TEMPERATURE().DIFFHEATER)) && batteryFlag) 
-// 		{
-// 			HeaterOn;
-// 		}
+	
+		else if((heat < (float)(tempHeater - TEMPERATURE().DIFFHEATER)) && batteryFlag) 
+		{
+			HeaterOn;
+		}
 		
 		
 		UARTSend_str("   ");
