@@ -27,8 +27,8 @@
 					TCNT1 = 0;
 
 
-const uint8_t RED = PD5;
-const uint8_t GREEN = PD6;
+const uint8_t GREEN = PD5;
+const uint8_t RED = PD6;
 //Входы для сигнала с кнопки c 2 режимами
 const uint8_t BUTTON_PIN1 = PD0; 
 const uint8_t BUTTON_PIN2 = PD4;
@@ -111,7 +111,7 @@ struct TEMPERATURE
     const float HEATER2 = 120;	
 	const float HEATER_OFF = -274;
 	//макс температура для батареи
-    const float BATTERY = tempToVolt(60);
+    const float BATTERY = 60;
 
 	const  float DIFFBATTERY = 10;
 	const  float DIFFHEATER = 10;
@@ -130,5 +130,6 @@ const int TIMER_DIVIDER = 256;
 extern float tempHeater;
 
 extern bool is_sleeping;
+
 
 #endif /* CONFIG_H_ */

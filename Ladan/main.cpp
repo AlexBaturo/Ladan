@@ -36,12 +36,14 @@ int main(void)
 		
 		wdt_disable();
 		if(is_sleeping){
+
+			HeaterOff;
 			sleep_enable();
 			sleep_cpu();
+
 		}
 		else 
 		{	
-			//if(arg == 0) pwm.launchPwm(color_values.red, color_values.green);
 			sleep_disable();
 		}	
     }

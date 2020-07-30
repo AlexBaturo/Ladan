@@ -1,4 +1,4 @@
-﻿#include "ButtonDiods.h"
+#include "ButtonDiods.h"
 #include "Uart.h"
 #include "PWM.h"
 
@@ -140,11 +140,11 @@ ISR(PCINT2_vect)
 						{
 							case MODE1:
 							tempHeater = TEMPERATURE().HEATER1;
-	     					pwm.launchPwm(255, 0);
+	     					pwm.launchPwm(50, 255);
 							break;
 							case MODE2:
 							tempHeater = TEMPERATURE().HEATER2;
- 							pwm.launchPwm(0, 255);	
+ 							pwm.launchPwm(255, 0);	
 							default:
 							break;
 

@@ -80,20 +80,18 @@ void batteryPWR()
 		{
 			batteryFlag = true;
 		}
-// 			//HeaterOn;
-// 		}
 		
-	    UARTSend_str("\n\r");
+	    UARTSend_str("   ");
 }
 
 void heaterPWR()
 {
 		const float heat = VoltToTemp(ADC_convert(), temp);
 		sendTemp("Heater: ", heat);
-		if(heat > (float)(tempHeater))
+		if(heat > (float)(tempHeater) || !batteryFlag )
 		{
 			HeaterOff;
-// 		}
+		}
 	
 		else if((heat < (float)(tempHeater - TEMPERATURE().DIFFHEATER)) && batteryFlag) 
 		{
@@ -107,27 +105,40 @@ void heaterPWR()
 void power()
 {
 	temp = ADC_convert();
-	sendTemp("Power: ", 1000*Uin(temp));
-	
-	UARTSend_str("   ");
+	const float pwr = Uin(temp);
+	sendTemp("Power: ", 1000*pwr);
+	sendTemp("Power: ", Uin(temp));
+
+
+	if(pwr < 3.3)
+	{
+		PORTD &= ~((1<<PD6)|(1<<PD5));
+		for(int i=0; i<2; i++)
+		{
+			PORTD |= (1<<PD6);
+			for(long int j =0; j < 300000; j++){};
+			PORTD &= ~(1<<PD6);
+			for(long int j =0; j < 300000; j++){}
+		}
+		is_sleeping = true;
+	}
+	UARTSend_str("\n\r");
 	
 }
 
 
 ISR (TIMER0_COMPA_vect)
 {	
-	 ADMUX &= ~(1<<MUX0);
-	 ADMUX |= (1<<MUX1);
-	 heaterPWR();
+	 	
+	ADMUX &= ~(1<<MUX0);
+	ADMUX |= (1<<MUX1);
+	heaterPWR();
 
-	 ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
-	 batteryPWR();
-	 ADMUX |= (1<<MUX1)|(1<<MUX0);
-	 ADMUX &=~(1<<MUX2);
-	 power();
-		
-	 ADMUX |= (1<<MUX0); 
-	 ADMUX &= ~(1<<MUX1);
-	 batteryPWR();
+	ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
+	batteryPWR();
+	ADMUX |= (1<<MUX1)|(1<<MUX0);
+	ADMUX &=~(1<<MUX2);
+	power();
+	 
 	
 }
