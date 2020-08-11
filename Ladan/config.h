@@ -6,32 +6,17 @@
 #include "math.h"
 
 #define F_CPU 1000000UL
-#define diodeOn(x) PORTB |= x 
-#define diodeOff(x) PORTB &= ~(x) 
-#define diodePortInit DDRB |= (1 << DIODE2)|(1 << DIODE1)
 #define termoPortInit DDRD |= (1<<BATTERY)|(1<<HEATER)
 #define HeaterOn PORTD |= (1<<HEATER)
 #define HeaterOff PORTD &= ~(1<<HEATER)
 #define BatteryOn PORTD |= (1<<BATTERY)
 #define BatteryOff PORTD &= ~(1<<BATTERY)
-#define pressSensInit DDRB &= ~(1<<PRESSURE); \
-					  PORTB |= (1<<PRESSURE);
-#define pressSensAns !(PINB & (1<<PRESSURE))
 
-#define ButtonPinsInit DDRD &= ~((1<<BUTTON_PIN2)|(1<<BUTTON_PIN1)); 
-#define ButtonPinsOn(x) PORTD |= x
-#define ButtonPort PIND
 
-#define startTimerA1 TCCR1B |= (1 << CS12)|(1 << CS10);  // запускаем таймер с делителем 256
-#define stopTimerA1 TCCR1B &= ~((1 << CS12)|(1 << CS10)); \
-					TCNT1 = 0;
 
 
 const uint8_t GREEN = PD5;
 const uint8_t RED = PD6;
-//Входы для сигнала с кнопки c 2 режимами
-const uint8_t BUTTON_PIN1 = PD0; 
-const uint8_t BUTTON_PIN2 = PD4;
 
 //Входы для сигнала с кнопки одинарной
 const uint8_t BUTTON_PIN = PD2;
@@ -40,12 +25,6 @@ const uint8_t BUTTON_PIN = PD2;
 const uint8_t HEATER = PD3;
 const uint8_t BATTERY = PD4; 
 
-//Выходы управление диодами
-const uint8_t DIODE1 = PB1;
-const uint8_t DIODE2 = PB2;
-
-//Вход с датчика давления 
-const uint8_t PRESSURE = PB6;
 
 //Период опроса АЦП, мс
 const int TIMER_A0 = 300;

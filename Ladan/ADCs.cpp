@@ -21,7 +21,6 @@ void initADC()
 {
 	//инициальизация портов
 	termoPortInit;
-	pressSensInit;
 
 	DDRC |= (1<<PC4);
 	PORTC |= (1<<PC4);

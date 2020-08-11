@@ -20,17 +20,13 @@ void PCINTEnable(bool state)
 
 	if (state)
 	{
-		//EICRA |= (1<<ISC01); //включим прерывания INT0 по нисходящему фронту
-		//EIMSK |= (1<<INT0); //разрешим внешние прерывания INT0
-		PCMSK2 |= (1<<PCINT18);
 
+		PCMSK2 |= (1<<PCINT18);
 		// Enable pin change interrupt 2 using the Pin Change Interrrupt Control Register (PCICR)
 		PCICR |= (1<<PCIE2);
 	}
 	else
 	{
-		//EIMSK &= ~(1<<INT0);
-		//EICRA &= ~(1<<ISC01);
 		PCMSK2 &= ~(1<<PCINT18);
 		PCICR &= ~(1<<PCIE2);
 	}
@@ -76,14 +72,11 @@ void initButtonDiodsPins()
 	  включаем таймерА1 для борьбы с дребезгом,
 	  настраиваем внешнее прерывание*/
 	  	
-	//Диоды 
-	diodePortInit;
 
 	//Начальный режим работы
 	//HeaterOn;
 	
-	ButtonPinsInit;
-	ButtonPinsOn((1<<BUTTON_PIN2)|(1<<BUTTON_PIN1)|(1<<BUTTON_PIN));
+	ButtonPinsOn((1<<BUTTON_PIN));
 
 	PCINTEnable(true);
 
@@ -95,9 +88,7 @@ Bounce bounce = Bounce();
 ISR(PCINT2_vect)
 {	
 	
-	//is_sleeping = false;
 	//wdt_enable(WDTO_4S);
-	DDRD |= (1<<HEATER);
 	
 	if(bounce.counter())
 		{
@@ -133,7 +124,6 @@ ISR(PCINT2_vect)
 	
 			if(!is_sleeping )
 				{
-					//diodeOff((1 << DIODE1)|(1<<DIODE2));
 					
 					if(curMode > MODE2) curMode = MODE1;
 					switch(curMode)
@@ -156,12 +146,6 @@ ISR(PCINT2_vect)
 	
 }
 
-
-// ISR(TIMER1_COMPA_vect)
-// {
-// 	INT0Enable(true);
-// 	stopTimerA1;
-// }
 
 
 
