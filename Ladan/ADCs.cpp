@@ -130,15 +130,18 @@ void power()
 ISR (TIMER0_COMPA_vect)
 {	
 	 	
-	ADMUX &= ~(1<<MUX0);
-	ADMUX |= (1<<MUX1);
-	heaterPWR();
+	   if(!is_sleeping)
+	   {
+		   ADMUX &= ~(1<<MUX0);
+		   ADMUX |= (1<<MUX1);
+		   heaterPWR();
 
-	ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
-	batteryPWR();
-	ADMUX |= (1<<MUX1)|(1<<MUX0);
-	ADMUX &=~(1<<MUX2);
-	power();
+		   ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
+		   batteryPWR();
+		   ADMUX |= (1<<MUX1)|(1<<MUX0);
+		   ADMUX &=~(1<<MUX2);
+		   power();
+	   }
 	 
 	
 }
