@@ -53,8 +53,11 @@ ISR(PCINT0_vect)
 	PCINTEnable(false);
 	while(!(PINB & (1<<PB0)))
 	{
-		if(!(PINB & (1<<PB1))) pwm1.launchPwm(0, 255);
-		else pwm1.launchPwm(255, 150);
+		pwm1.launchPwm(255, 150);
+	}
+	while(!(PINB & (1<<PB1)))
+	{
+		pwm1.launchPwm(0, 255);
 	}
 
 	pwm1.launchPwm(0, 0);
