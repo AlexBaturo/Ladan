@@ -16,6 +16,7 @@
 
 void initADC();
 void testADC();
+void resetAdc();
 
 
 

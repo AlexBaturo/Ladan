@@ -7,6 +7,7 @@
 #include <avr/wdt.h>
 
 #include "config.h"
+#include "ADCs.h"
 
 void initButtonDiodsPins();
 void PCINTEnable(bool state);

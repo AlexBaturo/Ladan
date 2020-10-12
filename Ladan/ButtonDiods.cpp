@@ -101,6 +101,7 @@ ISR(PCINT2_vect)
 								{
 									is_sleeping = false;
 									curMode = MODE1;
+									initADC();
 									//PORTD |= (1<<HEATER);
 									
 								}
@@ -110,6 +111,7 @@ ISR(PCINT2_vect)
 									PORTD &= ~(1<<HEATER);
 									is_sleeping = true;
 									pwm.launchPwm(0, 0);
+									resetAdc();
 									//wdt_disable();
 									tempHeater = TEMPERATURE().HEATER_OFF;
 								} 

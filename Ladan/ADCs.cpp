@@ -17,6 +17,14 @@ void iniTimerA0(void)
 	
 }
 
+void resetTimerA0(void)
+{
+	OCR0A = 0;
+	TCCR0A &= ~(1<<WGM01); //выбор режима CTС
+	TCCR0B &= ~((1 << CS02)|(1 << CS00));  //делитель 256
+	TIMSK0 &= ~(1 << OCIE0A);
+}
+
 void initADC()
 {
 	//инициальизация портов
@@ -38,6 +46,17 @@ void initADC()
 
 	iniTimerA0();
 	
+}
+
+void resetAdc()
+{
+	ADCSRA =0;
+	ADMUX = 0;
+
+	DDRC &= ~((1<<PC4)|(1<<PC0));
+	PORTC &= ~((1<<PC4)|(1<<PC0));
+
+	resetTimerA0();
 }
 
 float ADC_convert ()
@@ -129,18 +148,16 @@ void power()
 ISR (TIMER0_COMPA_vect)
 {	
 	 	
-	   if(!is_sleeping)
-	   {
-		   ADMUX &= ~(1<<MUX0);
-		   ADMUX |= (1<<MUX1);
-		   heaterPWR();
+	ADMUX |= (1<<MUX1)|(1<<MUX0);
+	ADMUX &=~(1<<MUX2);
+	power();
 
-		   ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
-		   batteryPWR();
-		   ADMUX |= (1<<MUX1)|(1<<MUX0);
-		   ADMUX &=~(1<<MUX2);
-		   power();
-	   }
+	ADMUX &= ~(1<<MUX0);
+	ADMUX |= (1<<MUX1);
+	heaterPWR();
+
+	ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
+	batteryPWR();
 	 
 	
 }
