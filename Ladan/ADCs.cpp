@@ -150,7 +150,7 @@ void power()
 
 ISR (TIMER0_COMPA_vect)
 {	
-	 	
+	wdt_reset();	
 	ADMUX |= (1<<MUX1)|(1<<MUX0);
 	ADMUX &=~(1<<MUX2);
 	power();

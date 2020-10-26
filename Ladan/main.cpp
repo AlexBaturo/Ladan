@@ -26,6 +26,8 @@ int main(void)
 	UARTInit();
 	InitCharge();
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+	wdt_enable(WDTO_4S);
+	bool wdtOn = false;
 	sei();
 
 	
@@ -34,17 +36,24 @@ int main(void)
     while (1) 
     {	
 		
-		wdt_disable();
+		wdt_reset();
 		if(is_sleeping){
 
 			HeaterOff;
+			wdtOn = false;
+			MCUSR = 0;
+			wdt_disable();
 			sleep_enable();
 			sleep_cpu();
 
 		}
 		else 
 		{	
-			sleep_disable();
+			if (!wdtOn)
+			{
+				wdt_enable(WDTO_2S);
+				wdtOn = true;
+			}
 		}	
     }
 }

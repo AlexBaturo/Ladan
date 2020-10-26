@@ -80,14 +80,14 @@ ISR(PCINT2_vect)
 {	
 	
 	//wdt_enable(WDTO_4S);
-	
 	if(bounce.counter())
 		{
 			unsigned count = 0;
 			while(!(PIND & (1<<PD2)))
 				{	
+					wdt_reset();
 					if(count++ > TIME_BEFORE_ON) 
-						{
+						{	
 							if(is_sleeping) 
 								{
 									is_sleeping = false;
