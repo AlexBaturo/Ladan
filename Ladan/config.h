@@ -89,6 +89,8 @@ struct TEMPERATURE
 	const float HEATER1 = 85;
 	//второй режим
     const float HEATER2 = 120;	
+	//режим для очистки чаши
+	const float HEATER_SAFETY = 50;
 	const float HEATER_OFF = -274;
 	//макс температура для батареи
     const float BATTERY = 60;

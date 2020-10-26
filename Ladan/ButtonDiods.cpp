@@ -3,7 +3,7 @@
 #include "PWM.h"
 
 
-enum {MODE0, MODE1, MODE2};
+enum {MODE0, MODE1, MODE2, MODE3};
 
 float tempHeater;
 uint32_t red;
@@ -118,7 +118,7 @@ ISR(PCINT2_vect)
 			if(!is_sleeping )
 				{
 					
-					if(curMode > MODE2) curMode = MODE1;
+					if(curMode > MODE3) curMode = MODE1;
 					switch(curMode)
 						{
 							case MODE1:
@@ -128,10 +128,13 @@ ISR(PCINT2_vect)
 							case MODE2:
 							tempHeater = TEMPERATURE().HEATER2;
  							pwm.launchPwm(255, 0);	
+							break;
+							case MODE3:
+							tempHeater = TEMPERATURE().HEATER_SAFETY;
+							pwm.launchPwm(0, 255);
+							break;	
 							default:
 							break;
-
-						
 						}
 						curMode++;
 					}
