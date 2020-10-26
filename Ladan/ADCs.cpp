@@ -4,6 +4,7 @@
 
 float temp;
 bool batteryFlag = true;
+bool voltage = true;
 
 
 void iniTimerA0(void)
@@ -131,6 +132,7 @@ void power()
 	if(pwr < 3.3)
 	{
 		PORTD &= ~((1<<PD6)|(1<<PD5));
+		resetAdc();
 		for(int i=0; i<2; i++)
 		{
 			PORTD |= (1<<PD6);
@@ -139,6 +141,7 @@ void power()
 			for(long int j =0; j < 300000; j++){}
 		}
 		is_sleeping = true;
+		voltage = false;
 	}
 	UARTSend_str("\n\r");
 	
@@ -152,12 +155,15 @@ ISR (TIMER0_COMPA_vect)
 	ADMUX &=~(1<<MUX2);
 	power();
 
-	ADMUX &= ~(1<<MUX0);
-	ADMUX |= (1<<MUX1);
-	heaterPWR();
+	if (voltage)
+	{
+		ADMUX &= ~(1<<MUX0);
+		ADMUX |= (1<<MUX1);
+		heaterPWR();
 
-	ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
-	batteryPWR();
+		ADMUX |= (1<<MUX2)|(1<<MUX1)|(1<<MUX0);
+		batteryPWR();
+	}
 	 
 	
 }
