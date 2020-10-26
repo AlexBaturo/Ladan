@@ -76,7 +76,7 @@ void initButtonDiodsPins()
 	//Начальный режим работы
 	//HeaterOn;
 	
-	ButtonPinsOn((1<<BUTTON_PIN));
+	ButtonPinsOn;
 
 	PCINTEnable(true);
 

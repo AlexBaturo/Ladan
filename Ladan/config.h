@@ -11,6 +11,7 @@
 #define HeaterOff PORTD &= ~(1<<HEATER)
 #define BatteryOn PORTD |= (1<<BATTERY)
 #define BatteryOff PORTD &= ~(1<<BATTERY)
+#define ButtonPinsOn PORTD |= (1<<BUTTON_PIN)
 
 
 
