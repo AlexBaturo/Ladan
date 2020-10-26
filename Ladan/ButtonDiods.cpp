@@ -86,7 +86,7 @@ ISR(PCINT2_vect)
 			unsigned count = 0;
 			while(!(PIND & (1<<PD2)))
 				{	
-					if(count++ > 300) 
+					if(count++ > TIME_BEFORE_ON) 
 						{
 							if(is_sleeping) 
 								{

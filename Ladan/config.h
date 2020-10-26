@@ -13,7 +13,11 @@
 #define BatteryOff PORTD &= ~(1<<BATTERY)
 #define ButtonPinsOn PORTD |= (1<<BUTTON_PIN)
 
+//хз в чем измеряется, но зависит от частоты проца
+//const int TIME_BEFORE_ON = 10000;
 
+//При использовании UART раскомментить строку ниже 
+const int TIME_BEFORE_ON = 300;
 
 
 const uint8_t GREEN = PD5;
