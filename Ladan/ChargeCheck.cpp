@@ -9,6 +9,7 @@
  #include "config.h"
  #include "PWM.h"
  #include "ButtonDiods.h"
+ #include "ADCs.h"
  #include <avr/sleep.h>
 
  void PCINTEnable1(bool state)
@@ -59,7 +60,7 @@ ISR(PCINT0_vect)
 	{
 		pwm1.launchPwm(0, 255);
 	}
-
+	resetAdc();
 	pwm1.launchPwm(0, 0);
 	PCINTEnable(true);
 	is_sleeping = true;
