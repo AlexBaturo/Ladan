@@ -53,15 +53,6 @@ public:
 private:
 	unsigned int count = 0;
 };
-void iniTimerA1(void)
-{
-	// инициализация TimerA1
-
-	//OCR1A = timeToInt(TIMER_A1); // установка регистра совпадения
-	OCR1A = 5000;
-	TCCR1B |= (1 << WGM12);  // включить CTC режим
-    TIMSK1 |= (1 << OCIE1A);
-}
 
 
 
