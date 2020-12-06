@@ -125,14 +125,15 @@ void power()
 {
 	temp = ADC_convert();
 	const float pwr = Uin(temp);
-	sendTemp("Power: ", 1000*pwr);
-	sendTemp("Power: ", Uin(temp));
+	//sendTemp("Power: ", 1000*pwr);
+	//sendTemp("Power: ", Uin(temp));
 
 
 	if(pwr < 3.3)
 	{
 		PORTD &= ~((1<<PD6)|(1<<PD5));
 		resetAdc();
+		voltage = false;
 		for(int i=0; i<2; i++)
 		{
 			PORTD |= (1<<PD6);
@@ -141,9 +142,9 @@ void power()
 			for(long int j =0; j < 300000; j++){}
 		}
 		is_sleeping = true;
-		voltage = false;
 	}
-	UARTSend_str("\n\r");
+	else voltage = true;
+	//UARTSend_str("\n\r");
 	
 }
 
