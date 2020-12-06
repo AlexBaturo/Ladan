@@ -125,8 +125,8 @@ void power()
 {
 	temp = ADC_convert();
 	const float pwr = Uin(temp);
-	//sendTemp("Power: ", 1000*pwr);
-	//sendTemp("Power: ", Uin(temp));
+	sendTemp("Power: ", 1000*pwr);
+	sendTemp("Power: ", Uin(temp));
 
 
 	if(pwr < 3.3)
@@ -144,7 +144,7 @@ void power()
 		is_sleeping = true;
 	}
 	else voltage = true;
-	//UARTSend_str("\n\r");
+	UARTSend_str("\n\r");
 	
 }
 
