@@ -92,15 +92,15 @@ struct TEMPERATURE
 	//первый режим 
 	const float HEATER1 = 95;
 	//второй режим
-    const float HEATER2 = 130;	
+    const float HEATER2 = 145;	
 	//режим для очистки чаши
-	const float HEATER_SAFETY = 60;
+	const float HEATER_SAFETY = 80;
 	const float HEATER_OFF = -274;
 	//макс температура для батареи
-    const float BATTERY = 60;
+    const float BATTERY = 47;
 
-	const  float DIFFBATTERY = 10;
-	const  float DIFFHEATER = 5;
+	const  float DIFFBATTERY = 5;
+	const  float DIFFHEATER = 2;
 };
 
 struct COLOR_VALUES

@@ -129,7 +129,7 @@ void power()
 	sendTemp("Power: ", Uin(temp));
 
 
-	if(pwr < 3.3)
+	if(pwr < 3.2)
 	{
 		PORTD &= ~((1<<PD6)|(1<<PD5));
 		resetAdc();
