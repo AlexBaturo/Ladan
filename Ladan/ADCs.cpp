@@ -91,11 +91,21 @@ void batteryPWR()
 {		
 		const float heat = VoltToTemp1(ADC_convert(), temp);
 		sendTemp("Battery: ", heat);
-		if(heat > TEMPERATURE().BATTERY)
+		if(heat >= TEMPERATURE().BATTERY)
 		{	
 			batteryFlag = false;
+			PORTD &= ~((1<<PD6)|(1<<PD5));
+			resetAdc();
+			for(int i=0; i<2; i++)
+			{
+				PORTD |= (1<<PD6);
+				for(long int j =0; j < 300000; j++){};
+				PORTD &= ~(1<<PD6);
+				for(long int j =0; j < 300000; j++){}
+			}
+			is_sleeping = true;
 		}
-		else if(heat < (float)(TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY))
+		else 
 		{
 			batteryFlag = true;
 		}
