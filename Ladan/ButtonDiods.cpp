@@ -93,6 +93,7 @@ ISR(PCINT2_vect)
 									is_sleeping = false;
 									curMode = MODE1;
 									initADC();
+									pwm.launchPwm(0, 0);
 									//PORTD |= (1<<HEATER);
 									
 								}
