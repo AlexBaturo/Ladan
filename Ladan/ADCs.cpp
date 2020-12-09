@@ -136,9 +136,9 @@ void power()
 		voltage = false;
 		for(int i=0; i<2; i++)
 		{
-			PORTD |= (1<<PD6);
+			PORTD |= (1<<PD5);
 			for(long int j =0; j < 300000; j++){};
-			PORTD &= ~(1<<PD6);
+			PORTD &= ~(1<<PD5);
 			for(long int j =0; j < 300000; j++){}
 		}
 		is_sleeping = true;
