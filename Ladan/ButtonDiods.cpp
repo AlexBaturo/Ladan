@@ -6,6 +6,7 @@
 enum {MODE0, MODE1, MODE2, MODE3};
 
 float tempHeater;
+bool isFirst;
 uint32_t red;
 uint32_t green;
 
@@ -91,6 +92,7 @@ ISR(PCINT2_vect)
 							if(is_sleeping) 
 								{
 									is_sleeping = false;
+									isFirst = true;
 									curMode = MODE1;
 									initADC();
 									pwm.launchPwm(0, 0);

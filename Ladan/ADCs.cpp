@@ -87,23 +87,38 @@ void sendTemp(char *name, const float temp)
 	UARTSend_str("    ");
 }
 
+void ladanOff(uint8_t pin)
+{
+	PORTD &= ~((1<<PD6)|(1<<PD5));
+	resetAdc();
+	for(int i=0; i<2; i++)
+	{
+		PORTD |= (1<<pin);
+		for(long int j =0; j < 300000; j++){};
+		PORTD &= ~(1<<pin);
+		for(long int j =0; j < 300000; j++){}
+	}
+	is_sleeping = true;
+	
+}
+
 void batteryPWR()
 {		
 		const float heat = VoltToTemp1(ADC_convert(), temp);
 		sendTemp("Battery: ", heat);
+		
+		
+		if((heat >= (TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY)) &&  isFirst)
+		{
+			ladanOff(PD6);
+			UARTSend_str("   ");
+			return;
+		}
+		
+		isFirst = false;
 		if(heat >= TEMPERATURE().BATTERY)
 		{	
-			batteryFlag = false;
-			PORTD &= ~((1<<PD6)|(1<<PD5));
-			resetAdc();
-			for(int i=0; i<2; i++)
-			{
-				PORTD |= (1<<PD6);
-				for(long int j =0; j < 300000; j++){};
-				PORTD &= ~(1<<PD6);
-				for(long int j =0; j < 300000; j++){}
-			}
-			is_sleeping = true;
+			ladanOff(PD6);
 		}
 		else 
 		{
@@ -141,17 +156,8 @@ void power()
 
 	if(pwr < 3.2)
 	{
-		PORTD &= ~((1<<PD6)|(1<<PD5));
-		resetAdc();
 		voltage = false;
-		for(int i=0; i<2; i++)
-		{
-			PORTD |= (1<<PD5);
-			for(long int j =0; j < 300000; j++){};
-			PORTD &= ~(1<<PD5);
-			for(long int j =0; j < 300000; j++){}
-		}
-		is_sleeping = true;
+		ladanOff(PD5);
 	}
 	else voltage = true;
 	UARTSend_str("\n\r");

@@ -117,5 +117,7 @@ extern float tempHeater;
 
 extern bool is_sleeping;
 
+extern bool isFirst;
+
 
 #endif /* CONFIG_H_ */
