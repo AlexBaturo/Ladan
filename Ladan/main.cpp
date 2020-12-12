@@ -19,11 +19,11 @@
 
 int main(void)
 {	
-	//clock_prescale_set(clock_div_1);
+	clock_prescale_set(clock_div_16);
 	cli();  // Отключение глобального прерывания
 	initADC();
 	initButtonDiodsPins();
-	UARTInit();
+	//UARTInit();
 	InitCharge();
 	set_sleep_mode(SLEEP_MODE_PWR_DOWN);
 	wdt_enable(WDTO_4S);

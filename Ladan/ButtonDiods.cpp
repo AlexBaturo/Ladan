@@ -43,7 +43,7 @@ public:
 	bool counter()
 		{	
 			PCINTEnable(false);
-			while(count < 10000)
+			while(count < 1000)
 			{
 				count++;	
 			}

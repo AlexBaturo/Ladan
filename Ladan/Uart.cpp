@@ -9,7 +9,7 @@
 
 void UARTInit(void) {
 	UBRR0H = 0;
-	UBRR0L = 51; //baud rate 9600
+	UBRR0L = 12; //baud rate 9600
 	UCSR0B = (1<<TXEN0);
 	UCSR0C = (1<<UCSZ01)|(1<<UCSZ00); //8 bit, 1 stop bit
 }

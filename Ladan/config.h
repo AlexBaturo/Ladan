@@ -17,7 +17,7 @@
 //const int TIME_BEFORE_ON = 10000;
 
 //При использовании UART раскомментить строку ниже 
-const int TIME_BEFORE_ON = 300;
+const int TIME_BEFORE_ON = 800;
 
 
 const uint8_t GREEN = PD5;
