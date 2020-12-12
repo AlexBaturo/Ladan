@@ -87,11 +87,11 @@ void sendTemp(char *name, const float temp)
 	UARTSend_str("    ");
 }
 
-void ladanOff(uint8_t pin)
+void ladanOff(uint8_t pin, int count)
 {
 	PORTD &= ~((1<<PD6)|(1<<PD5));
 	resetAdc();
-	for(int i=0; i<2; i++)
+	for(int i=0; i<count; i++)
 	{
 		PORTD |= (1<<pin);
 		for(long int j =0; j < 300000; j++){};
@@ -110,7 +110,14 @@ void batteryPWR()
 		
 		if((heat >= (TEMPERATURE().BATTERY - TEMPERATURE().DIFFBATTERY)) &&  isFirst)
 		{
-			ladanOff(PD6);
+			ladanOff(PD6, 2);
+			UARTSend_str("   ");
+			return;
+		}
+		
+		if(heat < 6)
+		{
+			ladanOff(PD6, 3);
 			UARTSend_str("   ");
 			return;
 		}
@@ -118,7 +125,7 @@ void batteryPWR()
 		isFirst = false;
 		if(heat >= TEMPERATURE().BATTERY)
 		{	
-			ladanOff(PD6);
+			ladanOff(PD6, 2);
 		}
 		else 
 		{
@@ -157,7 +164,7 @@ void power()
 	if(pwr < 3.2)
 	{
 		voltage = false;
-		ladanOff(PD5);
+		ladanOff(PD5, 2);
 	}
 	else voltage = true;
 	UARTSend_str("\n\r");
