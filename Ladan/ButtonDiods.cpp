@@ -12,7 +12,7 @@ uint32_t green;
 
 bool is_sleeping = true;
 uint8_t curMode = MODE1;
-pwmPinsManage pwm = pwmPinsManage(RED, GREEN);
+//pwmPinsManage pwm = pwmPinsManage(RED, GREEN);
 
 
 void PCINTEnable(bool state)
@@ -95,7 +95,7 @@ ISR(PCINT2_vect)
 									isFirst = true;
 									curMode = MODE1;
 									initADC();
-									pwm.launchPwm(0, 0);
+									PORTD &= ~((1<<PD6)|(1<<PD5));
 									//PORTD |= (1<<HEATER);
 									
 								}
@@ -104,7 +104,7 @@ ISR(PCINT2_vect)
 									//DDRD &= ~(1<<HEATER);
 									PORTD &= ~(1<<HEATER);
 									is_sleeping = true;
-									pwm.launchPwm(0, 0);
+									PORTD &= ~((1<<PD6)|(1<<PD5));
 									resetAdc();
 									//wdt_disable();
 									tempHeater = TEMPERATURE().HEATER_OFF;
@@ -120,7 +120,7 @@ ISR(PCINT2_vect)
 	
 			if(!is_sleeping )
 				{
-					
+					pwmPinsManage pwm = pwmPinsManage(RED, GREEN);
 					if(curMode > MODE3) curMode = MODE1;
 					switch(curMode)
 						{
