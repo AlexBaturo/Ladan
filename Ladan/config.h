@@ -97,9 +97,9 @@ struct TEMPERATURE
 	const float HEATER_SAFETY = 80;
 	const float HEATER_OFF = -274;
 	//макс температура для батареи
-    const float BATTERY = 47;
+    const float BATTERY = 52;
 
-	const  float DIFFBATTERY = 5;
+	const  float DIFFBATTERY = 11;
 	const  float DIFFHEATER = 2;
 };
 
